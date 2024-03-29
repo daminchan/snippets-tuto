@@ -41,7 +41,11 @@ const ExamplePage = () => {
       <Text fontWeight="md" textAlign="center" color="gray.500" >ライブ デモ</Text>
       </Flex>
 
-     <FadeIn delay={0}><PreviewContainer onButtonClick={handlePreviewButtonClick} onOverLay={handleOnOverLay}/></FadeIn>
+     <FadeIn delay={0}><PreviewContainer onButtonClick={()=>{
+    setShowTryOut(true);
+  }} onOverLay={()=>{
+    setOverLay(true);
+  }}/></FadeIn>
      
      <AnimatePresence>
         {showOverLay && (
