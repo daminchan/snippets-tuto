@@ -1,6 +1,6 @@
 "use client"
 import React from 'react';
-import { Box, Button, Text, Link, useColorModeValue, VStack } from '@chakra-ui/react';
+import { Box, Button, Text, Link, VStack } from '@chakra-ui/react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 const TryItOutLinkContainer = () => {
