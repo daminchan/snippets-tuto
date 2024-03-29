@@ -31,11 +31,9 @@ import {
   import { highlight, languages } from 'prismjs/components/prism-core';
   import 'prismjs/components/prism-clike';
   import 'prismjs/components/prism-javascript';
-  import DynamicForms from '../form/DynamicForms';
   import { DeleteIcon, AddIcon } from '@chakra-ui/icons';
-  import PreviewContainer from '../previewContainer/PreviewContainer';
   import 'prismjs/themes/prism-okaidia.css';
-  import ExamplePage from '../examplePage/examplePage';
+  import ExamplePage from '../../demoPage/examplePage/examplePage';
 
   interface wordsToReplace{
     word:string;
