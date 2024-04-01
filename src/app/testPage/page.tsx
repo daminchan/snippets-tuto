@@ -33,7 +33,7 @@ import {
   import 'prismjs/components/prism-javascript';
   
   import { DeleteIcon, AddIcon } from '@chakra-ui/icons';
-  import PreviewContainer from '../demoPage/previewContainer/PreviewContainer';
+  import PreviewContainer from '../demoPage/_previewContainer/PreviewContainer';
   import 'prismjs/themes/prism-okaidia.css';
 
   interface Form {
@@ -165,8 +165,6 @@ import {
     </Flex>
     </Flex>
   </Flex>
-  {/* <CodeTypingPreview /> */}
-  {/* <PreviewContainer/> */}
 </Box>
     )
   }

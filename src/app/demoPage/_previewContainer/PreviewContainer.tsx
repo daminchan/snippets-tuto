@@ -35,9 +35,11 @@ import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism-okaidia.css';
 import { ArrowForwardIcon, DeleteIcon } from '@chakra-ui/icons';
 import ClickAnimationMessage from '@/components/animation/clickAnimationMessage';
+import FadeIn from '@/components/animation/fadeIn';
 interface PreviewContainerProps {
   onButtonClick: () => void; // この関数は何も受け取らず、何も返さない
   onOverLay:()=>void;
+  onSidebar:()=>void;
 }
 
   //コードタイピングディスプレイ
@@ -76,7 +78,7 @@ interface PreviewContainerProps {
     );
   };
 
-const PreviewContainer: React.FC<PreviewContainerProps> = ({onButtonClick,onOverLay}) => {
+const PreviewContainer: React.FC<PreviewContainerProps> = ({onButtonClick,onOverLay,onSidebar}) => {
   const [sampleCode,setSampleCode] =useState( `
   
   import React  from 'react';
@@ -135,6 +137,7 @@ const PreviewContainer: React.FC<PreviewContainerProps> = ({onButtonClick,onOver
     setIsButtonDisabled(true);
     onButtonClick();
     onOverLay();
+    onSidebar();
     // setIndex(0);
     const addCharacter = (i:number) => {
       if (i < newCode.length) {
@@ -161,7 +164,12 @@ const PreviewContainer: React.FC<PreviewContainerProps> = ({onButtonClick,onOver
    
 
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" flexDirection="row">
+      <Box>
+        <Flex minHeight="auto" direction="column" p={5}>
+          <FadeIn delay={0}><Text  fontSize="2xl" fontWeight="bold" textAlign="center" fontStyle="italic">Live Application</Text>
+          <Text fontWeight="md" textAlign="center" color="gray.500" >ライブ アプリケーション</Text></FadeIn>
+        </Flex>
+      <Box display="flex" justifyContent="center" alignItems="center" flexDirection="row" m={6}>
        <Box width="700px">
        <motion.div
         initial={{ scale: 1, x: 0  }} // 初期スケールは1（変更なし）
@@ -176,7 +184,7 @@ const PreviewContainer: React.FC<PreviewContainerProps> = ({onButtonClick,onOver
         <Text fontSize="lg" fontWeight="normal" fontStyle="italic" color="gray.600" mt={2}>userという文字をPascalCaseに変換するデモ</Text>
         <Divider my={4} sx={{  borderColor: "gray.400" }}/> {/* DividerはChakra UIに含まれるコンポーネントで、水平線を描画してコンテンツを区切る */}
             <VStack spacing={4} mt={3} align="stretch" >
-                    <Flex  alignItems="center">
+            <HStack spacing={4} alignItems="center">
                     <VStack spacing={1} align="left">
                     <Text fontSize="sm" fontWeight="semibold">変換したい単語</Text>
                         <Input defaultValue="user"  size='sm' isReadOnly   sx={{
@@ -222,7 +230,7 @@ const PreviewContainer: React.FC<PreviewContainerProps> = ({onButtonClick,onOver
                           変換
                         </Button>
                       </Flex>
-                      </Flex>
+                      </HStack>
                       </VStack>
               <Editor
                 value={code}
@@ -327,6 +335,7 @@ const PreviewContainer: React.FC<PreviewContainerProps> = ({onButtonClick,onOver
           </Box>    
           </motion.div>
                   </Box>
+      </Box>
       </Box>
   );
 };

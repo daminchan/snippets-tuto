@@ -1,6 +1,8 @@
 "use client"
 import React, { useState } from 'react'
-import ExamplePage from './examplePage/examplePage'
+import ExampleContainer from './_exampleContainer/exampleContainer';
+import HeroSection from '@/components/heroSection/heroSection';
+import UpdateInfo from './_updateInfo/updateInfo';
 
 
 const page = () => {
@@ -11,7 +13,9 @@ const page = () => {
     }
   return (
     <div>
-        <ExamplePage></ExamplePage>
+        <HeroSection/>
+        <UpdateInfo/>
+        <ExampleContainer/>
     </div>
   )
 }

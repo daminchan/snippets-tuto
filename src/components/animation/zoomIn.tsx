@@ -8,7 +8,7 @@ interface ZoomInProps{
 
 const ZoomIn : React.FC<ZoomInProps> = ({ children, delay = 0 }) => (
     <motion.div
-        initial={{ opacity: 0,scale: 1,y:0 }} // 初期スケールは1（変更なし）
+        initial={{ opacity: 0,scale: 1,y:-350 }} // 初期スケールは1（変更なし）
         animate={{ opacity: 1,scale: 1.5 ,y:-350}} // アニメーションでスケールを1.5に変更（50%拡大）
         exit={{ opacity: 0, transition: { duration: 0.5 } }}
         transition={{ 

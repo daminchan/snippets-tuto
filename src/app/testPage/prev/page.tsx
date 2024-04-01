@@ -33,7 +33,7 @@ import {
   import 'prismjs/components/prism-javascript';
   import { DeleteIcon, AddIcon } from '@chakra-ui/icons';
   import 'prismjs/themes/prism-okaidia.css';
-  import ExamplePage from '../../demoPage/examplePage/examplePage';
+  import ExamplePage from '../../demoPage/_exampleContainer/exampleContainer';
 
   interface wordsToReplace{
     word:string;
@@ -118,7 +118,7 @@ import {
        }
       });
       setWordsToReplace(newNumber)
-      console.log(newNumber)
+      
     }
 
 

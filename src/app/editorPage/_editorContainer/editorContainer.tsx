@@ -33,6 +33,7 @@ import {
   import 'prismjs/components/prism-javascript';
   import { DeleteIcon, AddIcon } from '@chakra-ui/icons';
   import 'prismjs/themes/prism-okaidia.css';
+import StepOneAnimationMessage from '@/components/animation/stepOneAnimationMessage';
  
 
 
@@ -48,8 +49,19 @@ const EditorContainer = () => {
     const [isUpdated,setIsUpdated]=useState(false);
     const [snippetOutput,setSnippetOutput]=useState('');
     const [inputCode,setInputCode]=useState('');
-    const [wordsToReplace,setWordsToReplace]=useState<wordsToReplace[]>([{word:'',caseFormat:'default',id:uuidv4(),inputOrder:1}])
+    const [wordsToReplace,setWordsToReplace]=useState<wordsToReplace[]>([{word:'',caseFormat:'default',id:uuidv4(),inputOrder:1}]);
     // const [inputOrder,setInputOrder]=useState(1)
+    const [isIconVisible, setIsIconVisible] = useState(true);
+    // const handleValueChange = (code:string) => {
+    //   setInputCode(code);
+    //   // inputCode が空でない場合はアイコンを非表示にする
+    //   setIsIconVisible(code === '');
+    // };
+    const handleValueChange = (code:string) => {
+      setInputCode(code);
+      // inputCode が空でない場合はアイコンを非表示にする
+      setIsIconVisible(code === '');
+    };
 
 //動的なリストの予定なのでindexは不適切…あとでUUIDを使用してIDで識別して処理する関数に変更予定
     const handleWordChange=(index:number,value:string)=>{
@@ -70,7 +82,7 @@ const EditorContainer = () => {
     const handleInputOrderChange=(valueAsNumber: number,id:string)=>{
         const newWord = [...wordsToReplace]
         const newWordToReplaceNumber = newWord.map((word)=>{
-            if(word.id!==id){
+            if(word.id ===id){
                 return {...word,inputOrder:valueAsNumber}
             }else{
                 return word;
@@ -95,10 +107,31 @@ const EditorContainer = () => {
             case 'Pascal':
                 return  `\${${wordsToReplace.inputOrder}/(.*)/\${${wordsToReplace.inputOrder}:/pascalcase}/}`; 
         
-            case 'Default':
+            case 'default':
                 return  `\${${wordsToReplace.inputOrder}}`;
             }
     }
+    const convertToJSON = (createToJsonText:string)=>{
+      const snippetTemplate = {
+        ['prefix']: {
+          "prefix": 'prefix',
+          "body": createToJsonText.split('\n'),
+          "description": 'description'
+        }
+      };
+      const jsonString =JSON.stringify(snippetTemplate, null, 2)
+
+      const addCharacter = (i:number) => {
+        if (i < jsonString.length) {
+          setTimeout(() => {
+            setSnippetOutput((currentCode) => currentCode + jsonString[i]);
+            addCharacter(i + 1); // 次の文字を追加するために再帰的に呼び出し
+          }, 1);
+        }
+      };
+      addCharacter(0);
+    }
+
 
     const updateCode =()=>{
         let newCode = inputCode;
@@ -107,16 +140,52 @@ const EditorContainer = () => {
             const regex = new RegExp(wordsToReplace.word,'g')
             const replacement = createCaseFormat(wordsToReplace)|| '';
             newCode = newCode.replace(regex,replacement)
-        })}
+            
+        })
+        convertToJSON(newCode)
+            setIsUpdated(true);
+      }
 
+    const clearCode =()=>{
+      const newWordsToReplace:wordsToReplace= {word:'',caseFormat:'default',id:uuidv4(),inputOrder:1}
+        setWordsToReplace([newWordsToReplace])
+      setInputCode('')
+      setSnippetOutput('')
+      
+      setIsUpdated(false)
+    }
     
 return (
     <Box>
+      
     <Box display="flex" justifyContent="center"  flexDirection="row" bg="gray.50" as='form' width="100%"  alignItems="flex-start" gap={5}>
       <Box width="700px" maxWidth="700px" p={3} m={0}>
-              <Box flex="1" shadow="base"  borderColor="gray.200" borderRadius="15px" bg="white" p={3} m={0}>
+              <Box flex="1" shadow="base"  borderColor="gray.200" borderRadius="15px" bg="white" p={3} m={0} position="relative">
+            
                 <Text fontSize="lg" fontWeight="semibold">変換したいコードを張り付ける</Text>
+                {isIconVisible && <StepOneAnimationMessage/>}
+                <Button  size='sm'
+                    onClick={clearCode}
+                    sx={{
+                      position: 'absolute',
+                      top: '10px',
+                      right: '20px',
+                      width: '70px',
+                      height: '39px',
+                      transition: "transform 0.9s ease, box-shadow 0.9s ease", 
+                      backgroundImage: "linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)",
+                      color: "white",
+                      _hover: {
+                        
+                        boxShadow: "md",
+                      },
+                      _active: {
+                        bgGradient: "linear-gradient(45deg, #e6683c 0%, #dc2743 25%, #cc2366 50%, #bc1888 75%, #f09433 100%)",
+                        transform: "scale(0.9)",
+                      }
+                    }} >クリア </Button>
                 <Divider my={4} sx={{  borderColor: "gray.400" }}/> {/* DividerはChakra UIに含まれるコンポーネントで、水平線を描画してコンテンツを区切る */}
+                
                 {isUpdated ? 
                  <Editor
                  value={snippetOutput}
@@ -134,7 +203,7 @@ return (
                  }}/>
                 :  <Editor
                 value={inputCode}
-                onValueChange={code => setInputCode(code)}
+                onValueChange={handleValueChange}
                 highlight={code => highlight(code, languages.js,'javascript')}
                 padding={10}
                 style={{
@@ -170,7 +239,7 @@ return (
                     <VStack spacing={1} align="left">
                       <Text fontSize="sm" fontWeight="semibold">変換形式</Text>
                       <Select placeholder="Default" size='sm' onChange={(e)=>{handleCaseFormatChange(index,e.target.value)}}>
-                            <option value="pascal">Pascal</option>
+                            <option value="Pascal">Pascal</option>
                             <option value="Choice">Choice</option>
                           </Select>
                     </VStack>

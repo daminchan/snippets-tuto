@@ -1,23 +1,25 @@
 "useClient"
 import { Box, Flex, Text } from '@chakra-ui/react';
 import React, { useState }  from 'react';
-import PreviewContainer from '../previewContainer/PreviewContainer';
+import PreviewContainer from '../_previewContainer/PreviewContainer';
 import FadeIn from '@/components/animation/fadeIn';
-import TryItOutLinkContainer from '../tryItoutLinkContainer/tryItOutLinkContainer';
+import TryItOutLinkContainer from '../_tryItoutLinkContainer/tryItOutLinkContainer';
 import ZoomIn from '@/components/animation/zoomIn';
 import { motion, AnimatePresence } from 'framer-motion';
-import TryItOutLinkSideContainer from '../tryItoutLinksideContainer/tryItoutLinksideContainer';
+import TryItOutLinkSideContainer from '../_tryItoutLinksideContainer/tryItoutLinksideContainer';
 
 
-const ExamplePage = () => {
+const ExampleContainer = () => {
   const [showTryOut,setShowTryOut] = useState(false);
   const [showOverLay,setOverLay] = useState(false);
-  const [showTryOutSidebar,setShotTryOutSidebar] = useState(false);
+  const [showTryOutSidebar,setShotTryOutSidebar] = useState(true);
+  const [showTryOutSidebarDefault,setShotTryOutSidebarDefault] = useState(true);
 
   const handleSetOverLay=()=>{
     setOverLay(false);
     setShowTryOut(false);
     handleSetTryOutSidebar();
+
   }
   const handleSetTryOutSidebar =()=>{
     setShotTryOutSidebar(true);
@@ -32,30 +34,17 @@ const ExamplePage = () => {
 
   return (
     <Box>
-        <Flex minHeight="auto" direction="column" p={5}>
-      <Text  fontSize="4xl" fontWeight="bold" textAlign="center"> Case Converter</Text>
-      <Text fontWeight="light" textAlign="center" color="gray.500">ケースコンバーター</Text>
-      </Flex>
-      <Box mb={4} textAlign="center" color="gray.600">
-      <Text fontSize="md" fontWeight="medium">
-        このアプリは、ユーザーが入力した単語をコードスニペット構文に自動変換するツールです。
-      </Text>
-      <Text fontSize="md" fontWeight="medium">
-        例えば、変数名や関数名をキャメルケース、スネークケース、パスカルケースなど、指定した形式に即座に変換し、コーディングの効率化をサポートします。
-      </Text>
-      </Box>
-      <Flex minHeight="auto" direction="column" p={5}>
-      <Text  fontSize="2xl" fontWeight="bold" textAlign="center" fontStyle="italic">Live Demo</Text>
-      <Text fontWeight="md" textAlign="center" color="gray.500" >ライブ デモ</Text>
-      </Flex>
-
-     <FadeIn delay={0}><PreviewContainer onButtonClick={()=>{
+    <FadeIn delay={0}><PreviewContainer onButtonClick={()=>{
     setShowTryOut(true);
   }} onOverLay={()=>{
     setOverLay(true);
-  }}/></FadeIn>
-     
-     <AnimatePresence>
+  }}
+    onSidebar={()=>{
+      setShotTryOutSidebar(false)
+    }}
+  
+  /></FadeIn>
+    <AnimatePresence>
         {showOverLay && (
           <>
             {/* オーバーレイ */}
@@ -78,17 +67,23 @@ const ExamplePage = () => {
               }}
               onClick={handleSetOverLay} 
             />
-              <Box m="9" style={{ zIndex: 2, position: 'relative' }}>
+              <Box m="9" style={{
+                  position: 'fixed', // 要素をビューポートに対して固定
+                  top: '86%', // 上から50%の位置
+                  left: '48%', // 左から50%の位置
+                  transform: 'translate(-50%, -50%)', // 要素の中心を正確にビューポートの中央に合わせる
+                  zIndex: 2, // オーバーレイより上に表示
+                 }}>
                 <ZoomIn><TryItOutLinkContainer /></ZoomIn>
               </Box>
           </>
         )}
       </AnimatePresence>
-      {showTryOutSidebar && (<>
-        <TryItOutLinkSideContainer/>
-      </>)}
+      <AnimatePresence>
+      {showTryOutSidebar && (<TryItOutLinkSideContainer/>)}
+      </AnimatePresence>
     </Box>
-  );
+      );
     };
 
-export default ExamplePage;
+export default ExampleContainer;
