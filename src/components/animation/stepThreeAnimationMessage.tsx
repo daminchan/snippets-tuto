@@ -4,14 +4,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 //無理やり対応している。
 //初期値にアイコンが変な所に出ているためアニメーションの開始を遅らせて対応
-const StepTwoAnimationMessage = () => {
+const StepThreeAnimationMessage = () => {
   return (
     <motion.div
     initial={{ opacity: 0, }} // 初期位置をボタンの上に設定
     style={{ 
     position: 'absolute', // 絶対位置
-    bottom: '30%',
-    right:'100%', // 上方向に20px（ボタンの上）
+    bottom: '80%',
+    left:'73%', 
     zIndex: 10, // 他の要素より前面に
     transform: 'translateX(50%)', // X軸の中心を基点にする
    
@@ -25,14 +25,14 @@ const StepTwoAnimationMessage = () => {
     <VStack>
       <Text
        sx={{
-        transform: 'rotate(-15deg) translateX(-15px)', // 10度に傾ける
+        transform: 'rotate(10deg) translateX(10px)', // 10度に傾ける
         display: 'inline-block', // transform を適用するために必要
       }}
-      >Step.2!!</Text>
+      >Step.3!!!</Text>
       <Image src='/22332633.png' width={50} height={50}></Image>
       </VStack>
     </motion.div>
   );
 };
 
-export default StepTwoAnimationMessage;
+export default StepThreeAnimationMessage;

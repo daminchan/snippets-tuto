@@ -33,8 +33,10 @@ import {
   import 'prismjs/components/prism-javascript';
   import { DeleteIcon, AddIcon } from '@chakra-ui/icons';
   import 'prismjs/themes/prism-okaidia.css';
-import StepOneAnimationMessage from '@/components/animation/stepOneAnimationMessage';
- 
+  import StepOneAnimationMessage from '@/components/animation/stepOneAnimationMessage';
+  import StepTwoAnimationMessage from '@/components/animation/stepTwoAnimationMessage';
+  import StepThreeAnimationMessage from '@/components/animation/stepThreeAnimationMessage';
+  
 
 
   interface wordsToReplace{
@@ -49,18 +51,27 @@ const EditorContainer = () => {
     const [isUpdated,setIsUpdated]=useState(false);
     const [snippetOutput,setSnippetOutput]=useState('');
     const [inputCode,setInputCode]=useState('');
+    //インプットフォームを管理している
     const [wordsToReplace,setWordsToReplace]=useState<wordsToReplace[]>([{word:'',caseFormat:'default',id:uuidv4(),inputOrder:1}]);
-    // const [inputOrder,setInputOrder]=useState(1)
+    //Json形式に変換する際のスニペット構文のタイトルとdescription管理用
+    const [prefix,setPrefix]=useState('');
+    const [description,setDescription]=useState('');
+    //アニメーションアイコンナビの動作を管理している
     const [isIconVisible, setIsIconVisible] = useState(true);
+    const [isIconVisibleTwo, setIsIconVisibleTwo] = useState(false);
+    const [isIconVisibleThree, setIsIconVisibleThree] = useState(false);
+    const [isLoading,setIsLoading] =useState(false);
     // const handleValueChange = (code:string) => {
     //   setInputCode(code);
     //   // inputCode が空でない場合はアイコンを非表示にする
     //   setIsIconVisible(code === '');
     // };
+    //アイコンを表示させるための関数
     const handleValueChange = (code:string) => {
       setInputCode(code);
       // inputCode が空でない場合はアイコンを非表示にする
       setIsIconVisible(code === '');
+      setIsIconVisibleTwo(code !== '');
     };
 
 //動的なリストの予定なのでindexは不適切…あとでUUIDを使用してIDで識別して処理する関数に変更予定
@@ -68,13 +79,14 @@ const EditorContainer = () => {
         const newWord = [...wordsToReplace]
         newWord[index].word= value;
         setWordsToReplace(newWord)
+        setIsIconVisibleTwo(value === '');
+        setIsIconVisibleThree(value !=='')
     };
     const handleCaseFormatChange=(index:number,value:string)=>{
         const newCaseFormat = [...wordsToReplace]
         newCaseFormat[index].caseFormat =value;
         setWordsToReplace(newCaseFormat)
     };
-
     //ここはChakraUIの記述方法だと思う
     // const handleInputOrderChange=(_valueAsString: string,valueAsNumber: number)=>{
     //     setInputOrder(valueAsNumber)
@@ -102,8 +114,9 @@ const EditorContainer = () => {
     }
 
     const createCaseFormat=(wordsToReplace:wordsToReplace)=>{
-        
-        switch(wordsToReplace.caseFormat){
+
+
+      switch(wordsToReplace.caseFormat){
             case 'Pascal':
                 return  `\${${wordsToReplace.inputOrder}/(.*)/\${${wordsToReplace.inputOrder}:/pascalcase}/}`; 
         
@@ -111,22 +124,31 @@ const EditorContainer = () => {
                 return  `\${${wordsToReplace.inputOrder}}`;
             }
     }
+
+
+
     const convertToJSON = (createToJsonText:string)=>{
       const snippetTemplate = {
-        ['prefix']: {
+        [prefix]: {
           "prefix": 'prefix',
           "body": createToJsonText.split('\n'),
-          "description": 'description'
+          "description": description
         }
       };
       const jsonString =JSON.stringify(snippetTemplate, null, 2)
 
       const addCharacter = (i:number) => {
         if (i < jsonString.length) {
+        
           setTimeout(() => {
             setSnippetOutput((currentCode) => currentCode + jsonString[i]);
             addCharacter(i + 1); // 次の文字を追加するために再帰的に呼び出し
+            //currentCode・・・現在のコード、つまり現在のコードに生成されたJsonStringコードのi番目を渡している。
+            //それを繰り返すことで動的にコードが生成されているようにみせている。
           }, 1);
+        
+        }else{
+          setIsLoading(false)
         }
       };
       addCharacter(0);
@@ -134,34 +156,35 @@ const EditorContainer = () => {
 
 
     const updateCode =()=>{
+        setSnippetOutput('')
+        setIsLoading(true)
         let newCode = inputCode;
 
         wordsToReplace.forEach((wordsToReplace) =>{
             const regex = new RegExp(wordsToReplace.word,'g')
             const replacement = createCaseFormat(wordsToReplace)|| '';
             newCode = newCode.replace(regex,replacement)
-            
         })
         convertToJSON(newCode)
-            setIsUpdated(true);
+        setIsUpdated(true);
+        setIsIconVisibleThree(false);
+     
+        
       }
 
     const clearCode =()=>{
       const newWordsToReplace:wordsToReplace= {word:'',caseFormat:'default',id:uuidv4(),inputOrder:1}
-        setWordsToReplace([newWordsToReplace])
+      setWordsToReplace([newWordsToReplace])
       setInputCode('')
       setSnippetOutput('')
-      
       setIsUpdated(false)
     }
-    
+   
 return (
     <Box>
-      
     <Box display="flex" justifyContent="center"  flexDirection="row" bg="gray.50" as='form' width="100%"  alignItems="flex-start" gap={5}>
       <Box width="700px" maxWidth="700px" p={3} m={0}>
               <Box flex="1" shadow="base"  borderColor="gray.200" borderRadius="15px" bg="white" p={3} m={0} position="relative">
-            
                 <Text fontSize="lg" fontWeight="semibold">変換したいコードを張り付ける</Text>
                 {isIconVisible && <StepOneAnimationMessage/>}
                 <Button  size='sm'
@@ -185,22 +208,21 @@ return (
                       }
                     }} >クリア </Button>
                 <Divider my={4} sx={{  borderColor: "gray.400" }}/> {/* DividerはChakra UIに含まれるコンポーネントで、水平線を描画してコンテンツを区切る */}
-                
                 {isUpdated ? 
-                 <Editor
-                 value={snippetOutput}
-                 onValueChange={code => setSnippetOutput(code)}
-                 highlight={code => highlight(code, languages.js,'javascript')}
-                 padding={10}
-                 style={{
-                   fontFamily: '"Fira code", "Fira Mono", monospace',
-                   fontSize: 15,
-                   minHeight: '24rem', // エディタの最小高さを設定
-                   overflow: 'auto',
-                   backgroundColor: '#2D2D2D', // 背景色
-                   color: '#fff',
-                   borderRadius: '15px', // 角丸
-                 }}/>
+                  <Editor
+                  value={snippetOutput}
+                  onValueChange={code => setSnippetOutput(code)}
+                  highlight={code => highlight(code, languages.js,'javascript')}
+                  padding={10}
+                  style={{
+                    fontFamily: '"Fira code", "Fira Mono", monospace',
+                    fontSize: 15,
+                    minHeight: '24rem', // エディタの最小高さを設定
+                    overflow: 'auto',
+                    backgroundColor: '#2D2D2D', // 背景色
+                    color: '#fff',
+                    borderRadius: '15px', // 角丸
+                  }}/>
                 :  <Editor
                 value={inputCode}
                 onValueChange={handleValueChange}
@@ -214,15 +236,13 @@ return (
                   backgroundColor: '#2D2D2D', // 背景色
                   color: '#fff',
                   borderRadius: '15px', // 角丸
-                }}/>}
-               
-                 </Box>
+                }}/>}</Box>
               </Box>
-            
-               <Flex flex="1" direction="column" p={3} m={0} maxWidth="700px" >
-               <Box width="700px">
-               <Box shadow="base"  borderColor="gray.200" borderRadius="15px" p={3} bg="white" flex="1" position="relative" >
+                <Flex flex="1" direction="column" p={3} m={0} maxWidth="700px" >
+                <Box width="700px">
+                <Box shadow="base"  borderColor="gray.200" borderRadius="15px" p={3} bg="white" flex="1" position="relative" >
                     {/* フォーム */}
+                    
                     <Text fontSize="lg" fontWeight="semibold">変換フォーム</Text>
                     <Divider my={4} sx={{  borderColor: "gray.400" }}/>
                 {wordsToReplace.map((wordsToReplace,index)=>(
@@ -230,11 +250,11 @@ return (
                     <HStack spacing={4} alignItems="center">
                     <VStack spacing={1} align="left">
                     <Text fontSize="sm" fontWeight="semibold">変換したい単語</Text>
+                    {isIconVisibleTwo &&<StepTwoAnimationMessage/>}
                         <Input 
                         value={wordsToReplace.word}
                         onChange={(e)=>{handleWordChange(index,e.target.value)}}
-                        placeholder="変換したい単語" size='sm'  sx={{ width: 'auto' }}
-                       />
+                        placeholder="変換したい単語" size='sm'  sx={{ width: 'auto' }}/>
                     </VStack>    
                     <VStack spacing={1} align="left">
                       <Text fontSize="sm" fontWeight="semibold">変換形式</Text>
@@ -243,19 +263,19 @@ return (
                             <option value="Choice">Choice</option>
                           </Select>
                     </VStack>
-                       <VStack spacing={1} align="left">
-                       <Text fontSize="sm" fontWeight="semibold">数字</Text>
-                       <NumberInput key={wordsToReplace.id} onChange={(_valueAsString, valueAsNumber) => handleInputOrderChange( valueAsNumber,wordsToReplace.id)} min={0} max={10} defaultValue={wordsToReplace.inputOrder} size='sm' sx={{  width: '90px', }}>
+                      <VStack spacing={1} align="left">
+                      <Text fontSize="sm" fontWeight="semibold">変換順序</Text>
+                      <NumberInput key={wordsToReplace.id} onChange={(_valueAsString, valueAsNumber) => handleInputOrderChange( valueAsNumber,wordsToReplace.id)} min={0} max={10} defaultValue={wordsToReplace.inputOrder} size='sm' sx={{  width: '90px', }}>
                               <NumberInputField placeholder="#1" />
                               <NumberInputStepper>
                                 <NumberIncrementStepper />
                                 <NumberDecrementStepper />
                               </NumberInputStepper>
                             </NumberInput>
-                       </VStack>
-                       <VStack spacing={1} align="left">
-                       <Spacer/>
-                       <IconButton
+                      </VStack>
+                      <VStack spacing={1} align="left">
+                      <Spacer/>
+                      <IconButton
                             aria-label="削除"
                             icon={<DeleteIcon />}
                             size='sm'
@@ -267,11 +287,13 @@ return (
                             }}
                             onClick={() => removeForm(wordsToReplace.id)}
                               />
-                       </VStack>
-                     </HStack>
+                      </VStack>
+                    </HStack>
                 </VStack>
                 ))}
-               <Button  size='sm'
+                {isIconVisibleThree && <StepThreeAnimationMessage/>}
+                  <Button  size='sm'
+                    isDisabled={isLoading}
                     onClick={updateCode}
                     sx={{
                       position: 'absolute',
@@ -290,13 +312,13 @@ return (
                         bgGradient: "linear-gradient(45deg, #e6683c 0%, #dc2743 25%, #cc2366 50%, #bc1888 75%, #f09433 100%)",
                         transform: "scale(0.9)",
                       }
-                    }} >変換
+                    }} >{isLoading ? '処理中...':'変換'}
                   </Button>
-                       <IconButton
-                            aria-label="追加"
-                            icon={<AddIcon/>}
-                            size='sm'
-                            sx={{
+                  <IconButton
+                          aria-label="追加"
+                          icon={<AddIcon/>}
+                          size='sm'
+                          sx={{
                               position: 'absolute',
                               top: '10px',
                               right:'20px',

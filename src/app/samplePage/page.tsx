@@ -33,11 +33,23 @@ import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism-okaidia.css';
 import { useToast } from '@chakra-ui/react'
+import { v4 as uuidv4 } from 'uuid';
+
+interface wordsToReplace{
+  word:string;
+  caseFormat:string;
+  id:string;
+  inputOrder:number;
+}
 
 const Form1 = () => {
   const [show, setShow] = useState(false)
   const handleClick = () => setShow(!show)
   const [code, setCode] = useState('// ここにコードを入力してください\n');
+  
+
+
+
   return (
     <>
       <Heading w="100%" textAlign={'center'} fontWeight="normal" mb="2%">
@@ -63,45 +75,54 @@ const Form1 = () => {
                 }}/>
         </FormControl>
       </Flex>
-      {/* <FormControl mt="2%">
-        <FormLabel htmlFor="email" fontWeight={'normal'}>
-          Email address
-        </FormLabel>
-        <Input id="email" type="email" />
-        <FormHelperText>We&apos;ll never share your email.</FormHelperText>
-      </FormControl>
-
-      <FormControl>
-        <FormLabel htmlFor="password" fontWeight={'normal'} mt="2%">
-          Password
-        </FormLabel>
-        <InputGroup size="md">
-          <Input
-            pr="4.5rem"
-            type={show ? 'text' : 'password'}
-            placeholder="Enter password"
-          />
-          <InputRightElement width="4.5rem">
-            <Button h="1.75rem" size="sm" onClick={handleClick}>
-              {show ? 'Hide' : 'Show'}
-            </Button>
-          </InputRightElement>
-        </InputGroup>
-      </FormControl> */}
     </>
   )
 }
 
 const Form2 = () => {
+  const [wordsToReplace,setWordsToReplace]=useState<wordsToReplace[]>([{word:'',caseFormat:'default',id:uuidv4(),inputOrder:1}])
+  
+  
+  const handleWordChange =(value:string,index:number)=>{
+    const newWord = [...wordsToReplace]
+    newWord[index].word = value;
+    setWordsToReplace(newWord)
+    console.log(newWord)
+  }
+  const handleFormatChange=(value:string,index:number)=>{
+    const newCaseFormat = [...wordsToReplace]
+    newCaseFormat[index].caseFormat = value;
+    setWordsToReplace(newCaseFormat)
+    console.log(newCaseFormat)
+  }
+  const handleInputOrderChange=(valueAsNumber:number,id:string)=>{
+    const newInputOrder = [...wordsToReplace]
+
+
+    const newWordToReplaceNumber = newInputOrder.map((newInputOrder)=>{
+      if(newInputOrder.id===id){
+        return {...newInputOrder,inputOrder:valueAsNumber}
+      }else{
+        return newInputOrder;
+      }
+    })
+    setWordsToReplace(newWordToReplaceNumber)
+    console.log(newWordToReplaceNumber)
+  }
+
+
+
   return (
     <>
       <Heading w="100%" textAlign={'center'} fontWeight="normal" mb="2%">
         Step.2 変換形式を設定する
       </Heading>
       <Flex  direction="row" gap="4" >
+      
+    {wordsToReplace.map((wordsToReplace,index)=>(
+    <>
       <FormControl>
         <FormLabel
-          htmlFor="country"
           fontSize="sm"
           fontWeight="md"
           color="gray.700"
@@ -112,6 +133,9 @@ const Form2 = () => {
           変換したい単語
         </FormLabel>
         <Input
+          value={wordsToReplace.word}
+          onChange={(e)=>{handleWordChange(e.target.value,index)}}
+          placeholder=''
           type="text"
           name=""
           id=""
@@ -136,9 +160,9 @@ const Form2 = () => {
          変換形式
         </FormLabel>
         <Select
-          id=""
           name=""
-          autoComplete=""
+          value={wordsToReplace.caseFormat}
+          onChange={(e)=>{handleFormatChange(e.target.value,index)}}
           placeholder="Default"
           focusBorderColor="brand.400"
           shadow="sm"
@@ -151,7 +175,6 @@ const Form2 = () => {
       </FormControl>
       <FormControl >
         <FormLabel
-          htmlFor="city"
           fontSize="sm"
           fontWeight="md"
           color="gray.700"
@@ -161,7 +184,7 @@ const Form2 = () => {
           mt="2%">
           編集順序
         </FormLabel>
-        <NumberInput min={0} max={100} defaultValue={1} size='sm' sx={{  width: '90px', }}>
+        <NumberInput min={1} key={wordsToReplace.id} max={10}  defaultValue={wordsToReplace.inputOrder} onChange={(_valueAsString,valueAsNumber)=>handleInputOrderChange(valueAsNumber,wordsToReplace.id)} size='sm' sx={{  width: '90px', }}>
           <NumberInputField placeholder="#1" />
           <NumberInputStepper>
           <NumberIncrementStepper />
@@ -195,6 +218,8 @@ const Form2 = () => {
           sx={{
                             }}/>
         </FormControl>                      
+    </>   
+    ))}
         </Flex>
     </>
   )

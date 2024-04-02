@@ -19,7 +19,7 @@ const StepOneAnimationMessage = () => {
     alignItems: 'center',
 }}
     animate={{ opacity: [0, 1, 0] }} // 点滅アニメーションを定義
-    transition={{ repeat: Infinity, duration: 1 ,delay:1.5}} // 無限に繰り返し、1秒ごとに点滅
+    transition={{ repeat: Infinity, duration: 1 ,delay:0}} // 無限に繰り返し、1秒ごとに点滅
     
   >
     <VStack>

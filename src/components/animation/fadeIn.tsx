@@ -9,7 +9,7 @@ interface FadeInProps {
 
 const FadeIn : React.FC<FadeInProps> = ({ children, delay = 0 }) => (
   <motion.div
-    initial={{ opacity: 0.02, y: 15 }}
+    initial={{ opacity: 0, y: 15 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.9, // デュレーションを1秒に設定
     delay,
