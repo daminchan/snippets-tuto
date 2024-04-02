@@ -166,8 +166,8 @@ const PreviewContainer: React.FC<PreviewContainerProps> = ({onButtonClick,onOver
     return (
       <Box>
         <Flex minHeight="auto" direction="column" p={5}>
-          <FadeIn delay={0}><Text  fontSize="2xl" fontWeight="bold" textAlign="center" fontStyle="italic">Live Application</Text>
-          <Text fontWeight="md" textAlign="center" color="gray.500" >ライブ アプリケーション</Text></FadeIn>
+          <FadeIn delay={0}><Text  fontSize="2xl" fontWeight="bold" textAlign="center" fontStyle="italic">Live Demo</Text>
+          <Text fontWeight="md" textAlign="center" color="gray.500" >ライブ デモ</Text></FadeIn>
         </Flex>
       <Box display="flex" justifyContent="center" alignItems="center" flexDirection="row" m={6}>
        <Box width="700px">
