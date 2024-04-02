@@ -176,8 +176,8 @@ const PreviewContainer: React.FC<PreviewContainerProps> = ({onButtonClick,onOver
         animate={{ scale: isToggled ? 0.9 : 1 , x: isToggled ? 350 : 0}} // アニメーションでスケールを1.5に変更（50%拡大）
         transition={{ 
         delay:0,
-        duration: 0.7, // アニメーションの持続時間を1秒に設定
-        ease: "easeInOut"}} // アニメーションの持続時間は0.5秒
+        duration: 0.5, // アニメーションの持続時間は0.5秒
+        ease: "easeInOut"}} 
     >
       <Box flex="1" shadow="base"  borderColor="gray.200" borderRadius="15px" p={3} m={5} bg="gray.50"  position="relative">
         <Text fontSize="lg" fontWeight="semibold" color="blue.500" fontStyle="italic" >変換前</Text>

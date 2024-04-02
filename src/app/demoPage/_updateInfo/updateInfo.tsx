@@ -22,6 +22,7 @@ const UpdateInfo = () => {
             { title: '対応中', description: '“new”というワードをスニペット構文に変換する際、張り付けたコード内に"news"という文字列が存在した場合それらにもスニペット構文が適応されてしまう不具合' },
             { title: '対応中', description: '未入力時に入力促進のエラーメッセージを表示' },
             { title: '対応中', description: 'アプデ情報を最新の10件まで表示するように' },
+            { title: '対応中', description: 'Json形式からJson形式への変換を出来るように対応中' },
           ],
         },
         {

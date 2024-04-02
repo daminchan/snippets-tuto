@@ -12,7 +12,7 @@ const ZoomIn : React.FC<ZoomInProps> = ({ children, delay = 0 }) => (
         animate={{ opacity: 1,scale: 1.5 ,y:-350}} // アニメーションでスケールを1.5に変更（50%拡大）
         exit={{ opacity: 0, transition: { duration: 0.5 } }}
         transition={{ 
-        duration: 0.8, // アニメーションの持続時間を1秒に設定
+        duration: 0.6, // アニメーションの持続時間を1秒に設定
         delay:6, // ここでアニメーション開始までの遅延時間を設定
         ease: "easeInOut"}} // アニメーションの持続時間は0.5秒
     >

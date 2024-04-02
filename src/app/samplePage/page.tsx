@@ -41,6 +41,19 @@ interface wordsToReplace{
   id:string;
   inputOrder:number;
 }
+interface Form2Props {
+  wordsToReplace: wordsToReplace[];
+  handleWordChange: (value: string, index: number) => void;
+  handleFormatChange: (value: string, index: number) => void;
+  handleInputOrderChange: (valueAsNumber: number, id: string) => void;
+  addNewForm: () => void;
+}
+interface Form3Props {
+  wordsToReplace: wordsToReplace[];
+}
+
+
+
 
 const Form1 = () => {
   const [show, setShow] = useState(false)
@@ -79,37 +92,8 @@ const Form1 = () => {
   )
 }
 
-const Form2 = () => {
-  const [wordsToReplace,setWordsToReplace]=useState<wordsToReplace[]>([{word:'',caseFormat:'default',id:uuidv4(),inputOrder:1}])
-  
-  
-  const handleWordChange =(value:string,index:number)=>{
-    const newWord = [...wordsToReplace]
-    newWord[index].word = value;
-    setWordsToReplace(newWord)
-    console.log(newWord)
-  }
-  const handleFormatChange=(value:string,index:number)=>{
-    const newCaseFormat = [...wordsToReplace]
-    newCaseFormat[index].caseFormat = value;
-    setWordsToReplace(newCaseFormat)
-    console.log(newCaseFormat)
-  }
-  const handleInputOrderChange=(valueAsNumber:number,id:string)=>{
-    const newInputOrder = [...wordsToReplace]
-
-
-    const newWordToReplaceNumber = newInputOrder.map((newInputOrder)=>{
-      if(newInputOrder.id===id){
-        return {...newInputOrder,inputOrder:valueAsNumber}
-      }else{
-        return newInputOrder;
-      }
-    })
-    setWordsToReplace(newWordToReplaceNumber)
-    console.log(newWordToReplaceNumber)
-  }
-
+const Form2: React.FC<Form2Props> = ({ wordsToReplace, handleWordChange, handleFormatChange, handleInputOrderChange,addNewForm }) => {
+ 
 
 
   return (
@@ -117,11 +101,10 @@ const Form2 = () => {
       <Heading w="100%" textAlign={'center'} fontWeight="normal" mb="2%">
         Step.2 変換形式を設定する
       </Heading>
-      <Flex  direction="row" gap="4" >
-      
+      <Flex  direction="column" gap="4" >
     {wordsToReplace.map((wordsToReplace,index)=>(
-    <>
-      <FormControl>
+     <Flex key={wordsToReplace.id} direction="row" align="center" justify="space-between" m={0}>
+      <FormControl key={wordsToReplace.id} m={3}>
         <FormLabel
           fontSize="sm"
           fontWeight="md"
@@ -147,7 +130,7 @@ const Form2 = () => {
           rounded="md"
         />
       </FormControl>
-      <FormControl>
+      <FormControl m={3}>
         <FormLabel
           htmlFor="変換形式"
           fontSize="sm"
@@ -173,7 +156,7 @@ const Form2 = () => {
           <option>Choice</option>
         </Select>
       </FormControl>
-      <FormControl >
+      <FormControl m={3}>
         <FormLabel
           fontSize="sm"
           fontWeight="md"
@@ -194,7 +177,6 @@ const Form2 = () => {
         </FormControl>
         <FormControl >
         <FormLabel
-          htmlFor="city"
           fontSize="sm"
           fontWeight="md"
           color="gray.700"
@@ -205,6 +187,7 @@ const Form2 = () => {
           追加  /  削除
         </FormLabel>
         <IconButton
+          onClick={addNewForm}
           aria-label="削除"
           icon={<AddIcon/>}
           size='sm'
@@ -218,14 +201,14 @@ const Form2 = () => {
           sx={{
                             }}/>
         </FormControl>                      
-    </>   
+        </Flex>
     ))}
         </Flex>
     </>
   )
 }
 
-const Form3 = () => {
+const Form3: React.FC<Form3Props>= ({wordsToReplace}) => {
   const [code, setCode] = useState('// 大丈夫なら変換ボタン\n');
   return (
     <>
@@ -251,27 +234,107 @@ const Form3 = () => {
                   marginTop: '16px',
                 }}/>
         </FormControl>
-
-        <FormControl id="email" mt={1}>
-          <FormLabel
-            fontSize="sm"
-            fontWeight="md"
-            color="gray.700"
-            _dark={{
-              color: 'gray.50',
-            }}>
-            入力された項目
-          </FormLabel>
-          <Textarea
-            placeholder=""
-            rows={3}
-            shadow="sm"
-            focusBorderColor="brand.400"
-            fontSize={{
-              sm: 'sm',
-            }}
-          />
+        <Flex  direction="column" gap="4" >
+        {wordsToReplace.map((word)=>(
+        // <FormControl id="" mt={1}>
+        //     <FormLabel
+        //       fontSize="sm"
+        //       fontWeight="md"
+        //       color="gray.700"
+        //       _dark={{
+        //         color: 'gray.50',
+        //       }}>
+        //       入力された項目  
+        //     </FormLabel>
+        //     <Textarea
+        //     readOnly
+        //     value={`単語: ${word.word}, 形式: ${word.caseFormat}, 順序: ${word.inputOrder}`}
+        //     placeholder=""
+        //     rows={3}
+        //     shadow="sm"
+        //     focusBorderColor="brand.400"
+        //     fontSize={{
+        //       sm: 'sm',
+        //     }}
+        //     />
+        // </FormControl>
+        <Box  key={word.id}>
+          <Flex key={word.id} direction="row" align="center" justify="space-between" m={0}>
+      <FormControl id='wordsToReplace.word' m={3}>
+        <FormLabel
+          fontSize="sm"
+          fontWeight="md"
+          color="gray.700"
+          _dark={{
+            color: 'gray.50',
+          }}
+          mt="2%">
+          変換したい単語
+        </FormLabel>
+        <Input
+          readOnly
+          value={word.word}
+          placeholder=''
+          type="text"
+          name=""
+          id=""
+          autoComplete=""
+          focusBorderColor="brand.400"
+          shadow="sm"
+          size="sm"
+          w="full"
+          rounded="md"
+        />
+      </FormControl>
+      <FormControl m={3}>
+        <FormLabel
+          htmlFor="変換形式"
+          fontSize="sm"
+          fontWeight="md"
+          color="gray.700"
+          _dark={{
+            color: 'gray.50',
+          }}
+          mt="2%">
+         変換形式
+        </FormLabel>
+        <Select
+          isReadOnly
+          name=""
+          value={word.caseFormat}
+          placeholder="Default"
+          focusBorderColor="brand.400"
+          shadow="sm"
+          size="sm"
+          w="full"
+          rounded="md">
+          <option>Pascal</option>
+          <option>Choice</option>
+        </Select>
+      </FormControl>
+      <FormControl m={3} >
+        <FormLabel
+          fontSize="sm"
+          fontWeight="md"
+          color="gray.700"
+          _dark={{
+            color: 'gray.50',
+          }}
+          mt="2%">
+          編集順序
+        </FormLabel>
+        <NumberInput isReadOnly defaultValue={word.inputOrder} size='sm' sx={{  width: '90px', }}>
+          <NumberInputField placeholder="#1" />
+          <NumberInputStepper>
+          <NumberIncrementStepper />
+          <NumberDecrementStepper />
+          </NumberInputStepper>
+          </NumberInput>                    
         </FormControl>
+        </Flex>
+        </Box>
+        ))}
+      </Flex>  
       </SimpleGrid>
     </>
   )
@@ -281,6 +344,37 @@ export default function Multistep() {
   const toast = useToast()
   const [step, setStep] = useState(1)
   const [progress, setProgress] = useState(33.33)
+  const [wordsToReplace,setWordsToReplace]=useState<wordsToReplace[]>([{word:'',caseFormat:'default',id:uuidv4(),inputOrder:1}])
+  
+  
+  const handleWordChange =(value:string,index:number)=>{
+    const newWord = [...wordsToReplace]
+    newWord[index].word = value;
+    setWordsToReplace(newWord)
+  }
+  const handleFormatChange=(value:string,index:number)=>{
+    const newCaseFormat = [...wordsToReplace]
+    newCaseFormat[index].caseFormat = value;
+    setWordsToReplace(newCaseFormat)
+  }
+  const handleInputOrderChange=(valueAsNumber:number,id:string)=>{
+    const newInputOrder = [...wordsToReplace]
+
+    const newWordToReplaceNumber = newInputOrder.map((newInputOrder)=>{
+      if(newInputOrder.id===id){
+        return {...newInputOrder,inputOrder:valueAsNumber}
+      }else{
+        return newInputOrder;
+      }
+    })
+    setWordsToReplace(newWordToReplaceNumber)
+  }
+
+  const addNewForm =()=>{
+   
+    const newWordsToReplace:wordsToReplace= {word:'',caseFormat:'default',id:uuidv4(),inputOrder:1}
+    setWordsToReplace([...wordsToReplace,newWordsToReplace])
+  }
 
   return (
     <>
@@ -293,7 +387,7 @@ export default function Multistep() {
         m="21px auto"
         as="form">
         <Progress hasStripe value={progress} mb="5%" mx="5%" isAnimated></Progress>
-        {step === 1 ? <Form1 /> : step === 2 ? <Form2 /> : <Form3 />}
+        {step === 1 ? <Form1 /> : step === 2 ? <Form2  addNewForm={addNewForm}  wordsToReplace={wordsToReplace}  handleWordChange={ handleWordChange}  handleFormatChange={ handleFormatChange} handleInputOrderChange={ handleInputOrderChange}/> : <Form3 wordsToReplace={wordsToReplace}/>}
         <ButtonGroup mt="5%" w="100%">
           <Flex w="100%" justifyContent="space-between">
             <Flex>
