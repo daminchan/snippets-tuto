@@ -198,7 +198,7 @@ const PreviewContainer: React.FC<PreviewContainerProps> = ({onButtonClick,onOver
                       <Select placeholder="Pascal" size='sm' isReadOnly ></Select>
                     </VStack>
                       <VStack spacing={1} align="left" >
-                      <Text fontSize="sm" fontWeight="semibold">数字</Text>
+                      <Text fontSize="sm" fontWeight="semibold">順序</Text>
                       <NumberInput min={0} max={100} defaultValue={1} isReadOnly  size='sm' sx={{  width: '90px', }}>
                               <NumberInputField placeholder="#1" />
                               <NumberInputStepper>

@@ -13,16 +13,18 @@ const UpdateInfo = () => {
         {
           date: '2024/03/30',
           details: [
+            { title: '更新', description: '本番ページ：インプットフォームが未入力時、臨時対応として変換不可とし、トーストで入力されていない事を表示するよう対応' },
             { title: '更新', description: '全体：ユーザーの操作を直感的にサポートする為、アニメーションアイコンを導入しました' },
             { title: '更新', description: 'デモページ：アップデートや不具合関連を表示するようにしました。' },
             { title: '更新', description: '本番ページ：オールクリアボタンの追加' },
-            { title: '更新', description: '本番ページでのStepUpIconの初期位置が意図しない場所に表示する為、遅らせて表示する事で対応' },
+            { title: '更新', description: '本番ページ:StepUpIconの初期位置が意図しない場所に表示する為、遅らせて表示する事で対応' },
             { title: '更新', description: '変換が完了していないのに変換ボタンを押せる不具合の修正' },
             { title: '対応中', description: 'スニペット構文から他のスニペット構文に変換する際エラーがでる不具合' },
             { title: '対応中', description: '“new”というワードをスニペット構文に変換する際、張り付けたコード内に"news"という文字列が存在した場合それらにもスニペット構文が適応されてしまう不具合' },
             { title: '対応中', description: '未入力時に入力促進のエラーメッセージを表示' },
             { title: '対応中', description: 'アプデ情報を最新の10件まで表示するように' },
             { title: '対応中', description: 'Json形式からJson形式への変換を出来るように対応中' },
+            { title: '対応中', description: 'Choice構文は未実装' },
           ],
         },
         {
@@ -50,11 +52,6 @@ const UpdateInfo = () => {
           }
         }
       
-      
-      
-
-
-
 
   return (
     <Box  overflow="hidden" p={4}   m={24} >

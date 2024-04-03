@@ -25,6 +25,11 @@ import {
     Spacer,
     IconButton,
     Divider,
+    Alert,
+    AlertIcon,
+    AlertTitle,
+    AlertDescription,
+    useToast,
   } from '@chakra-ui/react'
   import { Input } from '@chakra-ui/react'
   import Editor from 'react-simple-code-editor';
@@ -61,6 +66,7 @@ const EditorContainer = () => {
     const [isIconVisibleTwo, setIsIconVisibleTwo] = useState(false);
     const [isIconVisibleThree, setIsIconVisibleThree] = useState(false);
     const [isLoading,setIsLoading] =useState(false);
+    const toast = useToast();
     // const handleValueChange = (code:string) => {
     //   setInputCode(code);
     //   // inputCode が空でない場合はアイコンを非表示にする
@@ -76,6 +82,7 @@ const EditorContainer = () => {
 
 //動的なリストの予定なのでindexは不適切…あとでUUIDを使用してIDで識別して処理する関数に変更予定
     const handleWordChange=(index:number,value:string)=>{
+      
         const newWord = [...wordsToReplace]
         newWord[index].word= value;
         setWordsToReplace(newWord)
@@ -137,25 +144,43 @@ const EditorContainer = () => {
       };
       const jsonString =JSON.stringify(snippetTemplate, null, 2)
 
-      const addCharacter = (i:number) => {
-        if (i < jsonString.length) {
+      // const addCharacter = (i:number) => {
+      //   if (i < jsonString.length) {
         
-          setTimeout(() => {
-            setSnippetOutput((currentCode) => currentCode + jsonString[i]);
-            addCharacter(i + 1); // 次の文字を追加するために再帰的に呼び出し
-            //currentCode・・・現在のコード、つまり現在のコードに生成されたJsonStringコードのi番目を渡している。
-            //それを繰り返すことで動的にコードが生成されているようにみせている。
-          }, 1);
+      //     setTimeout(() => {
+      //       setSnippetOutput((currentCode) => currentCode + jsonString[i]);
+      //       addCharacter(i + 1); // 次の文字を追加するために再帰的に呼び出し
+      //       //currentCode・・・現在のコード、つまり現在のコードに生成されたJsonStringコードのi番目を渡している。
+      //       //それを繰り返すことで動的にコードが生成されているようにみせている。
+      //     }, 1);
         
-        }else{
-          setIsLoading(false)
-        }
-      };
-      addCharacter(0);
+      //   }else{
+      //     setIsLoading(false)
+      //   }
+      // };
+      // addCharacter(0);
+
+      setSnippetOutput(jsonString)
+      setIsLoading(false)
     }
 
 
     const updateCode =()=>{
+      const hasEmptyFields = wordsToReplace.some(item => !item.word.trim() || !item.caseFormat.trim());
+
+      if (hasEmptyFields) {
+        toast({
+          title: "エラー",
+          description: "すべてのフィールドを入力してください。",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "top", // トーストを上部に表示
+        });
+        return;
+      }
+
+
         setSnippetOutput('')
         setIsLoading(true)
         let newCode = inputCode;
@@ -168,8 +193,6 @@ const EditorContainer = () => {
         convertToJSON(newCode)
         setIsUpdated(true);
         setIsIconVisibleThree(false);
-     
-        
       }
 
     const clearCode =()=>{
@@ -264,7 +287,7 @@ return (
                           </Select>
                     </VStack>
                       <VStack spacing={1} align="left">
-                      <Text fontSize="sm" fontWeight="semibold">変換順序</Text>
+                      <Text fontSize="sm" fontWeight="semibold">順序</Text>
                       <NumberInput key={wordsToReplace.id} onChange={(_valueAsString, valueAsNumber) => handleInputOrderChange( valueAsNumber,wordsToReplace.id)} min={0} max={10} defaultValue={wordsToReplace.inputOrder} size='sm' sx={{  width: '90px', }}>
                               <NumberInputField placeholder="#1" />
                               <NumberInputStepper>
