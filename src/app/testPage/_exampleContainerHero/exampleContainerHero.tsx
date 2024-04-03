@@ -36,6 +36,7 @@ import 'prismjs/themes/prism-okaidia.css';
 import { ArrowForwardIcon, DeleteIcon } from '@chakra-ui/icons';
 import ClickAnimationMessage from '@/components/animation/clickAnimationMessage';
 import FadeIn from '@/components/animation/fadeIn';
+import ExampleContainer from '@/app/demoPage/_exampleContainer/exampleContainer';
 interface PreviewContainerProps {
   onButtonClick: () => void; // この関数は何も受け取らず、何も返さない
   onOverLay:()=>void;
@@ -78,7 +79,7 @@ interface PreviewContainerProps {
     );
   };
 
-const PreviewContainer: React.FC<PreviewContainerProps> = ({onButtonClick,onOverLay,onSidebar}) => {
+const ExampleContainerHero: React.FC<PreviewContainerProps> = ({onButtonClick,onOverLay,onSidebar}) => {
   const [sampleCode,setSampleCode] =useState( `
   
   import React  from 'react';
@@ -86,7 +87,7 @@ const PreviewContainer: React.FC<PreviewContainerProps> = ({onButtonClick,onOver
   const user = () => {
     return (
       <div>
-        { content }
+        { Content}
       </div>
     );
   };`)
@@ -111,7 +112,7 @@ const PreviewContainer: React.FC<PreviewContainerProps> = ({onButtonClick,onOver
         "  const \${1/(.*)/\${1:/pascalcase}/}\ = () => {",
         "    return (",
         "      <div>",
-        "        { content }",
+        "        { Content}",
         "      </div>",
         "    );",
         "  };"
@@ -165,10 +166,6 @@ const PreviewContainer: React.FC<PreviewContainerProps> = ({onButtonClick,onOver
 
     return (
       <Box>
-        <Flex minHeight="auto" direction="column" p={5}>
-          <FadeIn delay={0}><Text  fontSize="2xl" fontWeight="bold" textAlign="center" fontStyle="italic" mb={2}>Live Demo</Text>
-          <Text fontWeight="md" textAlign="center" color="gray.500" >ライブ デモ</Text></FadeIn>
-        </Flex>
       <Box display="flex" justifyContent="center" alignItems="center" flexDirection="row" m={6}>
        <Box width="700px">
        <motion.div
@@ -180,7 +177,7 @@ const PreviewContainer: React.FC<PreviewContainerProps> = ({onButtonClick,onOver
         ease: "easeInOut"}} 
     >
       <Box flex="1" shadow="base"  borderColor="gray.200" borderRadius="15px" p={3} m={5} bg="gray.50"  position="relative">
-        <Text fontSize="lg" fontWeight="semibold" color="blue.500" fontStyle="italic" >変換前</Text>
+        <Text fontSize="lg" fontWeight="semibold"  fontStyle="italic" >変換前</Text>
         <Text fontSize="lg" fontWeight="normal" fontStyle="italic" color="gray.600" mt={2}>userという文字をPascalCaseに変換するデモ</Text>
         <Divider my={4} sx={{  borderColor: "gray.400" }}/> {/* DividerはChakra UIに含まれるコンポーネントで、水平線を描画してコンテンツを区切る */}
             <VStack spacing={4} mt={3} align="stretch" >
@@ -284,7 +281,7 @@ const PreviewContainer: React.FC<PreviewContainerProps> = ({onButtonClick,onOver
                           </Select>
                     </VStack>
                       <VStack spacing={1} align="left" >
-                      <Text fontSize="sm" fontWeight="semibold">順序</Text>
+                      <Text fontSize="sm" fontWeight="semibold">数字</Text>
                       <NumberInput min={0} max={100} defaultValue={1} isReadOnly  size='sm' sx={{  width: '90px', }}>
                               <NumberInputField placeholder="#1" />
                               <NumberInputStepper>
@@ -340,4 +337,4 @@ const PreviewContainer: React.FC<PreviewContainerProps> = ({onButtonClick,onOver
   );
 };
 
-export default PreviewContainer;
+export default ExampleContainerHero;

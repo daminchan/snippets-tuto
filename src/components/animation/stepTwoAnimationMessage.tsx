@@ -10,9 +10,9 @@ const StepTwoAnimationMessage = () => {
     initial={{ opacity: 0, }} // 初期位置をボタンの上に設定
     style={{ 
     position: 'absolute', // 絶対位置
-    bottom: '30%',
-    right:'100%', // 上方向に20px（ボタンの上）
-    zIndex: 10, // 他の要素より前面に
+    bottom: '60%',
+    right:'49%', // 上方向に20px（ボタンの上）
+    zIndex: 9, // 他の要素より前面に
     transform: 'translateX(50%)', // X軸の中心を基点にする
    
     justifyContent: 'center',

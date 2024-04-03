@@ -11,7 +11,7 @@ const TryItOutLinkSideContainer = () => {
     exit={{ opacity: 0,transition:{duration:0.3}}}
     transition={{ duration: 0.5 }}
   >
-    <Box width="200px"shadow="base"  borderColor="gray.200" borderRadius="15px" p={3}  margin="auto" 
+    <Box width="200px"  p={3}  margin="auto" 
         position="fixed" // 要素をビューポートに対して固定
         bottom="20px" // 下から20pxの位置
         right="20px" // 右から20pxの位置
