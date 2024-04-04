@@ -10,8 +10,8 @@ const StepThreeAnimationMessage = () => {
     initial={{ opacity: 0, }} // 初期位置をボタンの上に設定
     style={{ 
     position: 'absolute', // 絶対位置
-    bottom: '66%',
-    left:'62%', 
+    bottom: '90%',
+    left:'147%', 
     zIndex: 10, // 他の要素より前面に
     transform: 'translateX(50%)', // X軸の中心を基点にする
    

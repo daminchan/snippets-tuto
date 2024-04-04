@@ -36,7 +36,7 @@ import {
   import { highlight, languages } from 'prismjs/components/prism-core';
   import 'prismjs/components/prism-clike';
   import 'prismjs/components/prism-javascript';
-  import { DeleteIcon, AddIcon } from '@chakra-ui/icons';
+  import { DeleteIcon, AddIcon , CopyIcon } from '@chakra-ui/icons';
   import 'prismjs/themes/prism-okaidia.css';
   import StepOneAnimationMessage from '@/components/animation/stepOneAnimationMessage';
   import StepTwoAnimationMessage from '@/components/animation/stepTwoAnimationMessage';
@@ -85,7 +85,7 @@ const EditorContainer = () => {
       // inputCode が空でない場合はアイコンを非表示にする
       setIsIconVisible(code === '');
       setIsIconVisibleTwo(code !== '');
-      setIsIconVisibleThree(code === '');
+      setIsIconVisibleThree(false);
     };
 
 //動的なリストの予定なのでindexは不適切…あとでUUIDを使用してIDで識別して処理する関数に変更予定
@@ -106,6 +106,7 @@ const EditorContainer = () => {
         newWord[index].word = value;
         setWordsToReplace(newWord);
         // setIsIconVisible(false);
+        setIsIconVisible(value === '');
         setIsIconVisibleTwo(value === '');
         setIsIconVisibleThree(value !== '');
       } else {
@@ -278,20 +279,36 @@ const EditorContainer = () => {
       }
     };
 return (
-    <Box>
-    <Box display="flex" justifyContent="center"  flexDirection="row" bg="gray.50" as='form' width="100%"  alignItems="flex-start" gap={5}>
-      <Box width="700px" maxWidth="700px" p={3} m={0}>
-              <Box flex="1" shadow="base"  borderColor="gray.200" borderRadius="15px" bg="white" p={3} m={0} position="relative">
+      <Box>
+          <Box display="flex" justifyContent="center"  flexDirection="row" bg="gray.50" as='form' width="100%"  alignItems="flex-start" gap={5}>
+            <Box width="700px" maxWidth="700px"  position="relative" display="inline-block"p={3} m={0}>
+                <Box
+                    shadow="lg"
+                    borderRadius="sm"
+                    position="absolute"
+                    zIndex="0"
+                    height="94%" // ボタンと同じ高さ
+                    width="96%" // ボタンと同じ幅
+                    border="33px solid  rgba(74, 74, 74, 0.25)" // ボーダーライン
+                    left="28px" // 右にずらす
+                    top="42px" // 上にずらす
+                  />
+                <Box  shadow="lg"  borderColor="gray.200" bg="white" p={10} m={0} position="relative">
+                <Flex justifyContent="space-between">
                 <Text fontSize="lg" fontWeight="semibold">変換したいコードを張り付ける</Text>
-                <AnimatePresence> {isIconVisible && <StepOneAnimationMessage/>}</AnimatePresence>
+                <AnimatePresence> {isIconVisible && <StepOneAnimationMessage/>}
+                {isIconVisibleTwo && <StepTwoAnimationMessage />} 
+                {isIconVisibleThree && <StepThreeAnimationMessage/>}
+                </AnimatePresence>
+                <HStack>
+                <CopyIcon
+                onClick={copyToClipboard}
+                boxSize="32px" color="blue.500" _hover={{ color: "red.500" }}
+                />
                 <Button  size='sm'
                     onClick={clearCode}
+                    ml={3}
                     sx={{
-                      position: 'absolute',
-                      top: '10px',
-                      right: '20px',
-                      width: '70px',
-                      height: '39px',
                       transition: "transform 0.9s ease, box-shadow 0.9s ease", 
                       backgroundImage: "linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)",
                       color: "white",
@@ -304,10 +321,11 @@ return (
                         transform: "scale(0.9)",
                       }
                     }} >クリア </Button>
+                </HStack>
+                </Flex>
                 <Divider my={4} sx={{  borderColor: "gray.400" }}/> {/* DividerはChakra UIに含まれるコンポーネントで、水平線を描画してコンテンツを区切る */}
                 {isUpdated ? 
                   <Editor
-                  onClick={copyToClipboard}
                   value={snippetOutput}
                   onValueChange={code => setSnippetOutput(code)}
                   highlight={code => highlight(code, languages.js,'javascript')}
@@ -338,13 +356,56 @@ return (
                 }}/>}</Box>
               </Box>
                 <Flex flex="1" direction="column" p={3} m={0} maxWidth="700px" >
-                <Box width="470px">
-                {isIconVisibleTwo && <StepTwoAnimationMessage />} 
-                {isIconVisibleThree && <StepThreeAnimationMessage/>}
-                <Box shadow="base"  borderColor="gray.200" borderRadius="15px" p={3} bg="white" flex="1" position="relative" >
-                
+             
+                <Box width="500px" position="relative" display="inline-block">
+                <Box
+                    shadow="lg"
+                    borderRadius="sm"
+                    position="absolute"
+                    zIndex="0"
+                    height="100%" // ボタンと同じ高さ
+                    width="100%" // ボタンと同じ幅
+                    border="15px solid  rgba(74, 74, 74, 0.25)" // ボーダーライン
+                    left="12px" // 右にずらす
+                    top="12px" // 上にずらす
+                  />
+                <Box shadow="lg" borderColor="gray.200" borderRadius="3px" p={10} bg="white" flex="1" position="relative" >
+                <Flex justifyContent="space-between">
+                <Text fontSize="lg" fontWeight="semibold" >変換フォーム</Text>
+              
+                <HStack>
+                <Button  size='sm'
+                  _hover={{ cursor: 'pointer' }}
+                    isDisabled={isLoading}
+                    onClick={updateCode}
+                    sx={{
+                      width: '70px',
+                      height: '39px',
+                      transition: "transform 0.9s ease, box-shadow 0.9s ease", 
+                      backgroundImage: "linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)",
+                      color: "white",
+                      _hover: {
+                        boxShadow: "md",
+                      },
+                      _active: {
+                        bgGradient: "linear-gradient(45deg, #e6683c 0%, #dc2743 25%, #cc2366 50%, #bc1888 75%, #f09433 100%)",
+                        transform: "scale(0.9)",
+                      }
+                    }} >{isLoading ? '処理中...':'変換'}
+                  </Button>
+                  <IconButton
+                  _hover={{ cursor: 'pointer' }}
+                          aria-label="追加"
+                          icon={<AddIcon/>}
+                          size='sm'
+                          sx={{
+                              width: '40px',
+                              height: '39px',
+                            }}
+                            onClick={addForm} />
+                </HStack>
+                </Flex>
                     {/* フォーム */}
-                    <Text fontSize="lg" fontWeight="semibold">変換フォーム</Text>
                     <Divider my={4} sx={{  borderColor: "gray.400" }}/>
                       {/* Prefix */}
                       <Flex alignItems="center" gap="4">
@@ -370,7 +431,6 @@ return (
                         />
                       </Box>
                       </Flex>
-
                     {wordsToReplace.map((wordsToReplace, index) => (
                   <VStack spacing={4} mt={3} align="stretch" key={index}>
                     <HStack spacing={4} alignItems="center">
@@ -399,7 +459,6 @@ return (
                           <option value="Choice">Choice</option>
                         </Select>
                       </Box>
-
                       {/* 順序 */}
                       <Box >
                         <Text fontSize="sm" fontWeight="semibold">順序</Text>
@@ -418,7 +477,6 @@ return (
                           </NumberInputStepper>
                         </NumberInput>
                       </Box>
-               
                           {/* 削除ボタン */}
                           <IconButton
                           aria-label="削除"
@@ -434,50 +492,10 @@ return (
                             />
                     </HStack>
                   </VStack>
-                  
                 ))}
-                
-              
-                  <Button  size='sm'
-                  _hover={{ cursor: 'pointer' }}
-                    isDisabled={isLoading}
-                    onClick={updateCode}
-                    sx={{
-                      position: 'absolute',
-                      top: '10px',
-                      right: '70px',
-                      width: '70px',
-                      height: '39px',
-                      transition: "transform 0.9s ease, box-shadow 0.9s ease", 
-                      backgroundImage: "linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)",
-                      color: "white",
-                      _hover: {
-                        
-                        boxShadow: "md",
-                      },
-                      _active: {
-                        bgGradient: "linear-gradient(45deg, #e6683c 0%, #dc2743 25%, #cc2366 50%, #bc1888 75%, #f09433 100%)",
-                        transform: "scale(0.9)",
-                      }
-                    }} >{isLoading ? '処理中...':'変換'}
-                  </Button>
-                  <IconButton
-                  _hover={{ cursor: 'pointer' }}
-                          aria-label="追加"
-                          icon={<AddIcon/>}
-                          size='sm'
-                          sx={{
-                              position: 'absolute',
-                              top: '10px',
-                              right:'20px',
-                              width: '40px',
-                              height: '39px',
-                            }}
-                            onClick={addForm} />
                 </Box>
                 </Box>
             </Flex>
-            
         </Box>
       </Box>
   )

@@ -18,7 +18,7 @@ const UpdateInfo = () => {
             { title: '更新', description: '全体：アップデート内容などの表示を左寄せに変更・"LatestUpdates"から"Update Information"に変更' },
             { title: '更新', description: '変換ページ："prefix"と"snippet"フォームを追加' },
             { title: '更新', description: '変換ページ:クリップボードにコピーする機能・完了トーストの追加' },
-            { title: '更新', description: '変換ページ:インプットフォームを半角英数字のみ受け付けるように変更、全角文字を入力した場合トーストメッセージが出るように変更' },
+            { title: '更新', description: '変換ページ:インプットフォームを半角英数字のみ受け付けるように変更' },
             { title: '更新', description: '全体ページ:その他UI部分の調整・修正(ホバー時のpointer等)' },
             { title: '対応中', description: '変換条件を追加した時に順序をn+1になるように' },
       
@@ -76,7 +76,7 @@ const UpdateInfo = () => {
                       <Box flexShrink={0}>
                     <Text color={style.color} fontWeight={style.fontWeight}>{detail.title}</Text>
                       </Box>
-                      <Box maxW="1000px" wordBreak="break-word"> {/* 最大幅をsmに設定し、単語が長い場合は改行する */}
+                      <Box maxW="lx" > {/* 最大幅をsmに設定し、単語が長い場合は改行する */}
                     <Text color="gray.600">: {detail.description}</Text>
                   </Box>
                     </Flex>
