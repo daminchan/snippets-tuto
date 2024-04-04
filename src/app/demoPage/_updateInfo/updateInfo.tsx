@@ -33,7 +33,8 @@ const UpdateInfo = () => {
         {
           date: '2024/04/04',
           details: [
-            { title: '更新', description: '変換ページ：ワード未入力時、正規表現の関係でスペースも変換対象に含まれていたのを対応' },
+            { title: '更新', description: '変換ページ：デザイン変更・各"UIの調整"' },
+            { title: '更新', description: ' LP ：アップデートインフォメーションをスクロールで表示出来るように変更・"UIの調整"' },
             { title: '更新', description: '変換ページ：ステップちゃんが変換ボタンと被っていたのを修正・調整' },
             { title: '更新', description: '全体：アップデート内容などの表示を左寄せに変更・"LatestUpdates"から"Update Information"に変更' },
             { title: '更新', description: '変換ページ："prefix"と"snippet"フォームを追加' },
