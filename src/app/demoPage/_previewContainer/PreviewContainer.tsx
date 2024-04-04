@@ -183,31 +183,51 @@ const PreviewContainer: React.FC<PreviewContainerProps> = ({onButtonClick,onOver
         <Text fontSize="lg" fontWeight="semibold" color="blue.500" fontStyle="italic" >変換前</Text>
         <Text fontSize="lg" fontWeight="normal" fontStyle="italic" color="gray.600" mt={2}>userという文字をPascalCaseに変換するデモ</Text>
         <Divider my={4} sx={{  borderColor: "gray.400" }}/> {/* DividerはChakra UIに含まれるコンポーネントで、水平線を描画してコンテンツを区切る */}
-            <VStack spacing={4} mt={3} align="stretch" >
-            <HStack spacing={4} alignItems="center">
-                    <VStack spacing={1} align="left">
-                    <Text fontSize="sm" fontWeight="semibold">変換したい単語</Text>
-                        <Input defaultValue="user"  size='sm' isReadOnly   sx={{
-                           fontWeight: 'bold', // テキストを太字に
-                           color: 'gray.800', 
-                          fontStyle: 'italic',
-                          }}/>
-                    </VStack>    
-                    <VStack spacing={1} align="left">
-                      <Text fontSize="sm" fontWeight="semibold">変換形式</Text>
-                      <Select placeholder="Pascal" size='sm' isReadOnly ></Select>
-                    </VStack>
-                      <VStack spacing={1} align="left" >
-                      <Text fontSize="sm" fontWeight="semibold">順序</Text>
-                      <NumberInput min={0} max={100} defaultValue={1} isReadOnly  size='sm' sx={{  width: '90px', }}>
-                              <NumberInputField placeholder="#1" />
-                              <NumberInputStepper>
-                                <NumberIncrementStepper />
-                                <NumberDecrementStepper />
-                              </NumberInputStepper>
-                            </NumberInput>
-                    </VStack>
-                    <AnimatePresence>
+        <VStack spacing={4} mt={3} align="stretch">
+                    <HStack spacing={4} alignItems="center">
+                      {/* 変換したい単語 */}
+                      <Box >
+                        <Text fontSize="sm" fontWeight="semibold">変換したい単語</Text>
+                        <Input
+                          
+                          isReadOnly
+                          defaultValue="user"
+                          size="sm"
+                          sx={{   width: '150px', fontWeight: 'bold', // テキストを太字に
+                                  color: 'gray.800', // テキストの色を変更して視覚的に際立たせる
+                                  fontStyle: 'italic',
+                          }}
+                        />
+                      </Box>
+                      {/* 変換形式 */}
+                      <Box >
+                        <Text fontSize="sm" fontWeight="semibold">変換形式</Text>
+                        <Select
+                          placeholder="Pascal"
+                          size="sm"
+                          sx={{  width: '120px', }}
+                        >
+                        </Select>
+                      </Box>
+                      {/* 順序 */}
+                      <Box >
+                        <Text fontSize="sm" fontWeight="semibold">順序</Text>
+                        <NumberInput
+                          defaultValue={1} 
+                          isReadOnly
+                          min={1}
+                          max={10}
+                          size="sm"
+                          sx={{  width: '90px', }}
+                        >
+                          <NumberInputField />
+                          <NumberInputStepper>
+                            <NumberIncrementStepper />
+                            <NumberDecrementStepper />
+                          </NumberInputStepper>
+                        </NumberInput>
+                      </Box>
+                      <AnimatePresence>
                         {isMessageVisible && <ClickAnimationMessage/>}
                       </AnimatePresence>
                       <Flex flex="1" justifyContent="flex-end" position="relative">
@@ -230,8 +250,8 @@ const PreviewContainer: React.FC<PreviewContainerProps> = ({onButtonClick,onOver
                           変換
                         </Button>
                       </Flex>
-                      </HStack>
-                      </VStack>
+                    </HStack>
+                  </VStack>
               <Editor
                 value={code}
                 onValueChange={code => setCode(code)}
@@ -250,11 +270,8 @@ const PreviewContainer: React.FC<PreviewContainerProps> = ({onButtonClick,onOver
                   marginTop: '16px',
                 }}/>
                 </Box>
-                   </motion.div>
-                   </Box>
-                  {/* <Box mx={2} textAlign="center">
-                  <ArrowForwardIcon boxSize="24px" />
-                  </Box> */}
+                    </motion.div>
+                    </Box>
                   <Box width="700px">
                   <motion.div
                       initial={{ scale: 1 ,x: 0  }} // 初期スケールは1（変更なし）
@@ -268,52 +285,73 @@ const PreviewContainer: React.FC<PreviewContainerProps> = ({onButtonClick,onOver
                     <Text fontSize="lg" fontWeight="semibold"  fontStyle="italic" color="#f09433" pb={2}>変換後</Text>
                     <Text fontSize="lg" fontWeight="normal" fontStyle="italic" color="gray.600" mt={2}>userという文字をPascalCaseに変換するデモ</Text>
                       <Divider my={4} sx={{  borderColor: "gray.400" }}/> {/* DividerはChakra UIに含まれるコンポーネントで、水平線を描画してコンテンツを区切る */}
-                        <VStack spacing={4} mt={3} align="stretch" >
+                      <VStack spacing={4} mt={3} align="stretch">
                     <HStack spacing={4} alignItems="center">
-                    <VStack spacing={1} align="left">
-                    <Text fontSize="sm" fontWeight="semibold">変換したい単語</Text>
-                        <Input defaultValue="user"  size='sm' isReadOnly   sx={{
-                           fontWeight: 'bold', // テキストを太字に
-                           color: 'gray.800', // テキストの色を変更して視覚的に際立たせる
-                            fontStyle: 'italic',
-                          }}/>
-                    </VStack>    
-                    <VStack spacing={1} align="left">
-                      <Text fontSize="sm" fontWeight="semibold">変換形式</Text>
-                      <Select placeholder="Pascal" size='sm' isReadOnly >
-                          </Select>
-                    </VStack>
-                      <VStack spacing={1} align="left" >
-                      <Text fontSize="sm" fontWeight="semibold">順序</Text>
-                      <NumberInput min={0} max={100} defaultValue={1} isReadOnly  size='sm' sx={{  width: '90px', }}>
-                              <NumberInputField placeholder="#1" />
-                              <NumberInputStepper>
-                                <NumberIncrementStepper />
-                                <NumberDecrementStepper />
-                              </NumberInputStepper>
-                            </NumberInput>
-                      </VStack>
-                     {/* <Button
-                            onClick={ updateCode }
-                            size='sm'
-                            sx={{
-                              backgroundImage: "linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)",
-                              mt: '6',
-                              width: '60px',
-                              height: '30px',
-                              verticalAlign: 'middle',
-                              color: "white",
-                              _hover: {
-                        
-                                boxShadow: "md",
-                              },
-                              _active: {
-                                bgGradient: "linear-gradient(45deg, #e6683c 0%, #dc2743 25%, #cc2366 50%, #bc1888 75%, #f09433 100%)",
-                                transform: "scale(0.9)",
-                              }
-                            }}>変換</Button> */}
+                      {/* 変換したい単語 */}
+                      <Box >
+                        <Text fontSize="sm" fontWeight="semibold">変換したい単語</Text>
+                        <Input
+                          
+                          isReadOnly
+                          defaultValue="user"
+                          size="sm"
+                          sx={{   width: '150px', fontWeight: 'bold', // テキストを太字に
+                                  color: 'gray.800', // テキストの色を変更して視覚的に際立たせる
+                                  fontStyle: 'italic',
+                          }}
+                        />
+                      </Box>
+                      {/* 変換形式 */}
+                      <Box >
+                        <Text fontSize="sm" fontWeight="semibold">変換形式</Text>
+                        <Select
+                          isReadOnly
+                          placeholder="Pascal"
+                          size="sm"
+                          sx={{  width: '120px', }}
+                        >
+                        </Select>
+                      </Box>
+                      {/* 順序 */}
+                      <Box >
+                        <Text fontSize="sm" fontWeight="semibold">順序</Text>
+                        <NumberInput
+                          defaultValue={1} 
+                          isReadOnly
+                          min={1}
+                          max={10}
+                          size="sm"
+                          sx={{  width: '90px', }}
+                        >
+                          <NumberInputField />
+                          <NumberInputStepper>
+                            <NumberIncrementStepper />
+                            <NumberDecrementStepper />
+                          </NumberInputStepper>
+                        </NumberInput>
+                      </Box>
+                      <Flex flex="1" justifyContent="flex-end" position="relative">
+                        <Button
+                          onClick={updateCode}
+                          isDisabled={isButtonDisabled}
+                          size='lg'
+                          sx={{
+                            backgroundImage: "linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)",
+                            color: "white",
+                            _hover: {
+                            boxShadow: "md",
+                            },
+                            _active: {
+                              bgGradient: "linear-gradient(45deg, #e6683c 0%, #dc2743 25%, #cc2366 50%, #bc1888 75%, #f09433 100%)",
+                              transform: "scale(0.9)",
+                            }
+                          }}
+                        >
+                          変換
+                        </Button>
+                      </Flex>
                     </HStack>
-                </VStack>
+                  </VStack>
           <Editor
                 value={rightCode}
                 onValueChange={code => setRightCode(code)}

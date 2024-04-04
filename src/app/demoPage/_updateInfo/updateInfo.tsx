@@ -1,6 +1,6 @@
-import { Box, Heading, Text, List, ListItem, ListIcon, Flex } from '@chakra-ui/react';
+import { Box, Heading, Text, List, ListItem, ListIcon, Flex, VStack, HStack } from '@chakra-ui/react';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
-
+import React, { useEffect, useRef, useState } from 'react';
 
 
 
@@ -8,7 +8,27 @@ import { InfoOutlineIcon } from '@chakra-ui/icons';
 
 
 const UpdateInfo = () => {
+  // const [isBottom, setIsBottom] = useState(false);
+  // const scrollContainerRef =  useRef<HTMLDivElement>(null);
 
+  // const handleScroll = () => {
+  //   if (!scrollContainerRef.current) return;
+  //   const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
+  //   const isAtBottom = scrollTop + clientHeight >= scrollHeight;
+  //   setIsBottom(isAtBottom);
+  // };
+
+  // useEffect(() => {
+  //   const scrollContainer = scrollContainerRef.current;
+  //   if (scrollContainer) {
+  //     scrollContainer.addEventListener('scroll', handleScroll);
+  //   }
+  //   return () => {
+  //     if (scrollContainer) {
+  //       scrollContainer.removeEventListener('scroll', handleScroll);
+  //     }
+  //   };
+  // }, []);
     const updates = [
         {
           date: '2024/04/04',
@@ -54,15 +74,48 @@ const UpdateInfo = () => {
           }
         }
       
-
   return (
-    <Box  overflow="hidden" p={4}   m={24} >
-    <Heading as="h3"fontSize="2xl" fontWeight="bold" textAlign="center" fontStyle="italic" mb={2}>
-        Update Information
-    </Heading>
-    <Text fontWeight="md" textAlign="center" color="gray.500" >アップデートインフォメーション</Text>
-    <Box display="flex" flexDirection="column" alignItems="center" width="100%"padding="12">
-      <Box width="100%" maxWidth="1000px"> {/* maxWidthを調整してコンテンツの幅を制御 */}
+    <Box>
+    <Flex  minHeight="auto" direction="column" p={4}>
+    <Text  fontSize="2xl" fontWeight="bold" textAlign="center"fontStyle="italic"mb={2}> Update Information</Text>
+    <Text fontWeight="md" textAlign="center" color="gray.500">アップデートインフォメーション</Text>
+    </Flex>
+
+
+
+    <Box display="flex" flexDirection="column" alignItems="center" width="100%"padding="12" >
+      <Box width="100%" maxWidth="700px"position="relative"> {/* maxWidthを調整してコンテンツの幅を制御 */}
+      <Box
+            maxHeight="300px"
+            overflowY="auto"
+          
+            sx={{
+              '&::-webkit-scrollbar': {
+                width: '6px',
+                background: '#f0f0f0',
+              },
+              '&::-webkit-scrollbar-track': {
+                background: '#f0f0f0',
+              },
+              '&::-webkit-scrollbar-thumb': {
+                background: '#cccccc',
+                borderRadius: '4px',
+                transition: 'background 0.2s ease',
+              },
+              '&::-webkit-scrollbar-thumb:hover': {
+                background: '#bbbbbb',
+              },
+            }}
+          >
+            <Box
+              position="absolute"
+              left="0"
+              right="0"
+              bottom="0"
+              height="30px"
+              pointerEvents="none" // ぼやけ効果がマウスイベントを阻害しないように
+              background="linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1))" // ぼやけ効果
+            />
         <List spacing={3} m={6} textAlign="left">
           {updates.map((update, index) => (
             <ListItem key={index}>
@@ -72,21 +125,25 @@ const UpdateInfo = () => {
                   const style = getDetailStyle(detail.title);
                   return(
                     <Flex key={detailIndex} justifyContent="flex-start" alignItems="flex-start">
-                      <ListIcon as={InfoOutlineIcon} color="blue.500" />
+                      <HStack spacing={3} alignItems="flex-start">
                       <Box flexShrink={0}>
-                    <Text color={style.color} fontWeight={style.fontWeight}>{detail.title}</Text>
+                      <Text color={style.color} fontWeight={style.fontWeight}>
+                      <ListIcon as={InfoOutlineIcon} color="blue.500" />
+                        {detail.title}<Box as="span" color="gray.500" fontWeight="bold">:</Box></Text>
+                        </Box>
+                        <Box maxW="700px" > {/* 最大幅をsmに設定し、単語が長い場合は改行する */}
+                      <Text color="gray.600">{detail.description}</Text>
                       </Box>
-                      <Box maxW="lx" > {/* 最大幅をsmに設定し、単語が長い場合は改行する */}
-                    <Text color="gray.600">: {detail.description}</Text>
-                  </Box>
+                      </HStack>
                     </Flex>
                   )})}
               </Flex>
             </ListItem>
           ))}
-    </List>
-  </Box>
-</Box>
+        </List>
+        </Box>
+      </Box>
+    </Box>
   </Box>
   );
 };

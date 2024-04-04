@@ -356,7 +356,6 @@ return (
                 }}/>}</Box>
               </Box>
                 <Flex flex="1" direction="column" p={3} m={0} maxWidth="700px" >
-             
                 <Box width="500px" position="relative" display="inline-block">
                 <Box
                     shadow="lg"
@@ -372,7 +371,6 @@ return (
                 <Box shadow="lg" borderColor="gray.200" borderRadius="3px" p={10} bg="white" flex="1" position="relative" >
                 <Flex justifyContent="space-between">
                 <Text fontSize="lg" fontWeight="semibold" >変換フォーム</Text>
-              
                 <HStack>
                 <Button  size='sm'
                   _hover={{ cursor: 'pointer' }}
@@ -445,7 +443,6 @@ return (
                           sx={{  width: '150px', }}
                         />
                       </Box>
-
                       {/* 変換形式 */}
                       <Box >
                         <Text fontSize="sm" fontWeight="semibold">変換形式</Text>

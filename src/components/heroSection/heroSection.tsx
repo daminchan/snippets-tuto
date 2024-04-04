@@ -12,7 +12,7 @@ const HeroSection = () => {
     <Text fontWeight="light" textAlign="center" color="gray.500">ケースコンバーター</Text>
     </Flex>
     <Box display="flex" flexDirection="column" alignItems="center" width="100%"padding="12">
-    <Box width="100%" maxWidth="900px">
+    <Box width="100%" maxW="700px">
     <Text fontSize="md" fontWeight="medium" pb={1}>
         このアプリは、ユーザーが入力した単語をコードスニペット構文に自動変換するツールです。
     </Text>
