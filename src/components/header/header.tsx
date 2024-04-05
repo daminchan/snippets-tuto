@@ -32,7 +32,7 @@ const Header = () => {
       </Link>
         <Flex  gap={4}>
           <HStack spacing={32}>
-            <Text color="#F7FAFC">About</Text>
+          <Link href="/demoPage"><Button><Text color="#F7FAFC">About</Text></Button></Link>
             <Text color="#F7FAFC">Dashboard</Text>
           </HStack>
         </Flex> 

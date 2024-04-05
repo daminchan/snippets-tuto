@@ -11,8 +11,6 @@ const page = () => {
       <Box bg="gray.50" minHeight="100vh">
       <HeroSection/>
       <FadeIn delay={0.33}><EditorContainer/></FadeIn> 
-      {/* <StepOneAnimationMessage/> */}
-
       </Box>
   )
 }

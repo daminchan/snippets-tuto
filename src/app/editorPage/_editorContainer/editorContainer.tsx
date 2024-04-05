@@ -8,111 +8,99 @@ import {
     FormHelperText,
     Button,
     Select,
-    Stack,
     Box,
     VStack,
     Text,
-    RadioGroup,
-    Radio,
     HStack,
-    Textarea,
     Flex,
     NumberInput,
     NumberInputField,
     NumberInputStepper,
     NumberIncrementStepper,
     NumberDecrementStepper,
-    Spacer,
     IconButton,
     Divider,
-    Alert,
-    AlertIcon,
-    AlertTitle,
-    AlertDescription,
     useToast,
   } from '@chakra-ui/react'
   import { Input } from '@chakra-ui/react'
   import Editor from 'react-simple-code-editor';
   import { highlight, languages } from 'prismjs/components/prism-core';
+  import Prism from 'prismjs';
   import 'prismjs/components/prism-clike';
   import 'prismjs/components/prism-javascript';
-  import { DeleteIcon, AddIcon , CopyIcon } from '@chakra-ui/icons';
   import 'prismjs/themes/prism-okaidia.css';
+  import { DeleteIcon, AddIcon , CopyIcon } from '@chakra-ui/icons';
   import StepOneAnimationMessage from '@/components/animation/stepOneAnimationMessage';
   import StepTwoAnimationMessage from '@/components/animation/stepTwoAnimationMessage';
   import StepThreeAnimationMessage from '@/components/animation/stepThreeAnimationMessage';
-import { AnimatePresence } from 'framer-motion';
+  import { AnimatePresence ,motion,useAnimation } from 'framer-motion';
+
+import ActionButton from './_codeDisplayComponents/_actionButton/ActionButton';
+import CodeEditor from './_codeDisplayComponents/_codeEditor/CodeEditor';
+import ConversionInput from './_conversionFormComponents/conversionInput/ConversionInput';
+import WordForm from './_conversionFormComponents/wordForm/WordForm';
+import ConversionButton from './_conversionFormComponents/conversionButton/ConversionButton';
+
   
 
 
   interface wordsToReplace{
     word:string;
     caseFormat:string;
-    id:string;//uuidがstring型を求めているため
+    id:string;//uuidがstring型を求める為
     inputOrder: number;
-
-
   }
 
 
 const EditorContainer = () => {
-    const [isUpdated,setIsUpdated]=useState(false);
+    
+    //エディターに表示・読み込ませるためのコードを管理
     const [snippetOutput,setSnippetOutput]=useState('');
     const [inputCode,setInputCode]=useState('');
-    //インプットフォームを管理している
+    //変換フォームを管理
     const [wordsToReplace,setWordsToReplace]=useState<wordsToReplace[]>([{word:'',caseFormat:'default',id:uuidv4(),inputOrder:1}]);
-    //Json形式に変換する際のスニペット構文のタイトルとdescription管理用
-    const [description,setDescription]=useState('');
-    //アニメーションアイコンナビの動作を管理している
+    //スニペット、prefixを管理
+    const [prefix, setPrefix] = useState('');
+    const [snippetName, setSnippetName] = useState('');
+    //アニメーションアイコンナビの動作・CSSの管理
     const [isIconVisible, setIsIconVisible] = useState(true);
     const [isIconVisibleTwo, setIsIconVisibleTwo] = useState(false);
     const [isIconVisibleThree, setIsIconVisibleThree] = useState(false);
     const [isLoading,setIsLoading] =useState(false);
-    const [prefix, setPrefix] = useState('');
-    const [snippetName, setSnippetName] = useState('');
-
-
+    const [isUpdated,setIsUpdated]=useState(false);
+    //トースト関連を管理
     const toastIdRef = useRef<string | number | undefined>();
     const toast = useToast();
+
+    //アイコンを表示させるための関数
     // const handleValueChange = (code:string) => {
     //   setInputCode(code);
     //   // inputCode が空でない場合はアイコンを非表示にする
     //   setIsIconVisible(code === '');
+    //   setIsIconVisibleTwo(code !== '');
+    //   setIsIconVisibleThree(false);
     // };
-    //アイコンを表示させるための関数
-    const handleValueChange = (code:string) => {
-      setInputCode(code);
-      // inputCode が空でない場合はアイコンを非表示にする
-      setIsIconVisible(code === '');
-      setIsIconVisibleTwo(code !== '');
-      setIsIconVisibleThree(false);
-    };
 
-//動的なリストの予定なのでindexは不適切…あとでUUIDを使用してIDで識別して処理する関数に変更予定
-    // const handleWordChange=(index:number,value:string)=>{
-      
-    //     const newWord = [...wordsToReplace]
-    //     newWord[index].word= value;
-    //     setWordsToReplace(newWord)
-    //     setIsIconVisibleTwo(value === '');
-    //     setIsIconVisibleThree(value !=='')
-    // };
-    
+
+    //ワード更新関数
+    //動的なリストの予定なのでindexは不適切…？
+    //あとでUUIDを使用してIDで識別して処理する関数が適切？
     const handleWordChange=(index:number,value:string)=>{
+      //正規表現で英数字
       const pattern = /^[a-zA-Z0-9]*$/;
       if (pattern.test(value)) {
-        // 入力値が英数字のみの場合は、状態を更新
-        const newWord = [...wordsToReplace];
+      // 入力値が英数字のみの場合は、状態を更新
+      
+      const newWord = [...wordsToReplace];
         newWord[index].word = value;
         setWordsToReplace(newWord);
-        // setIsIconVisible(false);
-        setIsIconVisible(value === '');
+      //ステップアップちゃんの動作更新  
+        setIsIconVisible(false);
         setIsIconVisibleTwo(value === '');
         setIsIconVisibleThree(value !== '');
       } else {
         // 英数字以外が含まれている場合は、何もしない or エラーメッセージを表示
-         // 英数字以外が含まれている場合
-         const toastId = 'only-ascii'; 
+        const toastId = 'only-ascii'; 
           if (!toastIdRef.current || !toast.isActive(toastIdRef.current)) {
               toastIdRef.current = toast({
               id: toastId,
@@ -126,43 +114,42 @@ const EditorContainer = () => {
           }
       }
     };
+
+
+    //ケースフォーマット更新関数
     const handleCaseFormatChange=(index:number,value:string)=>{
         const newCaseFormat = [...wordsToReplace]
         newCaseFormat[index].caseFormat =value;
         setWordsToReplace(newCaseFormat)
     };
-    //ここはChakraUIの記述方法だと思う
-    // const handleInputOrderChange=(_valueAsString: string,valueAsNumber: number)=>{
-    //     setInputOrder(valueAsNumber)
-    // };
+    //IndexではなくIDを参照して配列のinputOrderを更新
     const handleInputOrderChange=(valueAsNumber: number,id:string)=>{
-        const newWord = [...wordsToReplace]
-        const newWordToReplaceNumber = newWord.map((word)=>{
-            if(word.id ===id){
-                return {...word,inputOrder:valueAsNumber}
+        const updatedWordSettings = wordsToReplace.map((element)=>{
+            if(element.id ===id){
+                return {...element,inputOrder:valueAsNumber}
             }else{
-                return word;
+                return element;
             }
         })
-        setWordsToReplace(newWordToReplaceNumber)
-    }
+        setWordsToReplace(updatedWordSettings)
+    };
 
         // Prefixの変更を扱う関数
     const handlePrefixChange = (value: string) => {
       setPrefix(value);
     };
-
     // スニペット名の変更を扱う関数
     const handleSnippetChange = (value: string) => {
       setSnippetName(value);
     };
 
-
+    //追加
     const addForm =()=>{
         const newWordsToReplace:wordsToReplace= {word:'',caseFormat:'default',id:uuidv4(),inputOrder: wordsToReplace.length + 1}
         setWordsToReplace([...wordsToReplace,newWordsToReplace])
-    }
-
+    };
+    //削除
+    //あとで復習
     const removeForm =(id:string)=>{
         // 指定されたIDを持つフォームを除外して新しい配列を作成
         const updatedWordsToReplace = wordsToReplace.filter(form => form.id !== id);
@@ -172,20 +159,18 @@ const EditorContainer = () => {
         }));
         setWordsToReplace(reorderedWordsToReplace);
     };
+
+    //変換フォーマットを扱う関数
     const createCaseFormat=(wordsToReplace:wordsToReplace)=>{
-
-
       switch(wordsToReplace.caseFormat){
             case 'Pascal':
                 return  `\${${wordsToReplace.inputOrder}/(.*)/\${${wordsToReplace.inputOrder}:/pascalcase}/}`; 
-        
             case 'default':
                 return  `\${${wordsToReplace.inputOrder}}`;
             }
-    }
+    };
 
-
-
+    //Json形式変換を扱う関数
     const convertToJSON = (createToJsonText:string,prefix: string,snippet:string)=>{
       const snippetTemplate = {
         [snippet]: {
@@ -197,26 +182,25 @@ const EditorContainer = () => {
       jsonString = jsonString.slice(1, -1).trim();
       const addCharacter = (i:number) => {
         if (i < jsonString.length) {
-        
           setTimeout(() => {
             setSnippetOutput((currentCode) => currentCode + jsonString[i]);
-            addCharacter(i + 1); // 次の文字を追加するために再帰的に呼び出し
+            addCharacter(i + 1); 
             //currentCode・・・現在のコード、つまり現在のコードに生成されたJsonStringコードのi番目を渡している。
             //それを繰り返すことで動的にコードが生成されているようにみせている。
           }, 1);
-        
         }else{
           setIsLoading(false)
         }
       };
       addCharacter(0);
-
+      //アニメーション無しの場合はこちら
       // setSnippetOutput(jsonString)
       // setIsLoading(false)
     }
 
-
+    //変換関数
     const updateCode =()=>{
+      //入力催促用のトースト
       // const hasEmptyFields = wordsToReplace.some(item => !item.word.trim() || !item.caseFormat.trim());
 
       // if (hasEmptyFields) {
@@ -232,7 +216,9 @@ const EditorContainer = () => {
       // }
         setSnippetOutput('')
         setIsLoading(true)
+      //置換処理
         let newCode = inputCode;
+      
         wordsToReplace.forEach((wordsToReplace) =>{
           if (wordsToReplace.word.trim() !== '') {
             const regex = new RegExp(wordsToReplace.word,'g')
@@ -242,8 +228,10 @@ const EditorContainer = () => {
         convertToJSON(newCode,prefix,snippetName)
         setIsUpdated(true);
         setIsIconVisibleThree(false);
-      }
+      };
 
+      
+    //入力を初期化ボタン
     const clearCode =()=>{
       const newWordsToReplace:wordsToReplace= {word:'',caseFormat:'default',id:uuidv4(),inputOrder:1,}
       setWordsToReplace([newWordsToReplace])
@@ -253,249 +241,122 @@ const EditorContainer = () => {
       setSnippetName('')
       setIsUpdated(false)
     }
+//コピー機能
     const copyToClipboard = async () => {
       try {
         await navigator.clipboard.writeText(snippetOutput);
-        // 成功時のトースト
         toast({
           title: 'コピー成功',
           description: "コピー完了!!",
           status: 'success',
           duration: 5000,
           isClosable: true,
-          position: "top", // または "bottom" など、好みに応じて位置を設定
+          position: "top", 
         });
       } catch (err) {
         console.error('クリップボードへのコピーに失敗しました', err);
-        // エラー時のトースト
         toast({
           title: 'コピー失敗',
           description: "クリップボードへのコピーに失敗しました。",
           status: 'error',
           duration: 5000,
           isClosable: true,
-          position: "top", // または "bottom" など、好みに応じて位置を設定
+          position: "top", 
         });
       }
     };
+//リファクタリング
+// CodeEditorコンポーネントに関わる記述
+const highlightWithPrism = (code: string) => Prism.highlight(code, Prism.languages.javascript, 'javascript');
+const handleCodeChange = (code: string) => {
+  if (isUpdated) {
+    //復習メモ：if文は真偽値に基づいて条件分岐を行う
+    //true であれば、if 文の中のブロックが実行。false の場合は、else ブロック（存在する場合）が実行。
+    //この場合はisUpdatedの真偽値を参照
+    setSnippetOutput(code);
+  } else {
+    setInputCode(code);
+  }
+  setIsIconVisible(code === '');
+  setIsIconVisibleTwo(code !== '');
+  setIsIconVisibleThree(false);
+};
+
 return (
       <Box>
           <Box display="flex" justifyContent="center"  flexDirection="row" bg="gray.50" as='form' width="100%"  alignItems="flex-start" gap={5}>
             <Box width="700px" maxWidth="700px"  position="relative" display="inline-block"p={3} m={0}>
-                <Box
-                    shadow="lg"
-                    borderRadius="sm"
-                    position="absolute"
-                    zIndex="0"
-                    height="94%" // ボタンと同じ高さ
-                    width="96%" // ボタンと同じ幅
-                    border="33px solid  rgba(74, 74, 74, 0.25)" // ボーダーライン
-                    left="28px" // 右にずらす
-                    top="42px" // 上にずらす
-                  />
-                <Box  shadow="lg"  borderColor="gray.200" bg="white" p={10} m={0} position="relative">
+            <Box shadow="lg" borderRadius="sm" position="absolute" zIndex="0" height="96%" width="90%" border="32px solid rgba(74, 74, 74, 0.25)" left="70px" top="30px" />
+              <Box shadow="lg" borderColor="gray.200" bg="white" p={10} m={0} position="relative">
                 <Flex justifyContent="space-between">
                 <Text fontSize="lg" fontWeight="semibold">変換したいコードを張り付ける</Text>
-                <AnimatePresence> {isIconVisible && <StepOneAnimationMessage/>}
+                <AnimatePresence> 
+                {isIconVisible && <StepOneAnimationMessage/>}
                 {isIconVisibleTwo && <StepTwoAnimationMessage />} 
                 {isIconVisibleThree && <StepThreeAnimationMessage/>}
                 </AnimatePresence>
-                <HStack>
-                <CopyIcon
-                onClick={copyToClipboard}
-                boxSize="32px" color="blue.500" _hover={{ color: "red.500" }}
-                />
-                <Button  size='sm'
-                    onClick={clearCode}
-                    ml={3}
-                    sx={{
-                      transition: "transform 0.9s ease, box-shadow 0.9s ease", 
-                      backgroundImage: "linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)",
-                      color: "white",
-                      _hover: {
-                        cursor: 'pointer',
-                        boxShadow: "md",
-                      },
-                      _active: {
-                        bgGradient: "linear-gradient(45deg, #e6683c 0%, #dc2743 25%, #cc2366 50%, #bc1888 75%, #f09433 100%)",
-                        transform: "scale(0.9)",
-                      }
-                    }} >クリア </Button>
-                </HStack>
+                <ActionButton onClear={clearCode} onCopy={copyToClipboard}/>
                 </Flex>
                 <Divider my={4} sx={{  borderColor: "gray.400" }}/> {/* DividerはChakra UIに含まれるコンポーネントで、水平線を描画してコンテンツを区切る */}
-                {isUpdated ? 
-                  <Editor
-                  value={snippetOutput}
-                  onValueChange={code => setSnippetOutput(code)}
-                  highlight={code => highlight(code, languages.js,'javascript')}
-                  padding={10}
-                  style={{
-                    fontFamily: '"Fira code", "Fira Mono", monospace',
-                    fontSize: 15,
-                    minHeight: '24rem', // エディタの最小高さを設定
-                    overflow: 'auto',
-                    backgroundColor: '#2D2D2D', // 背景色
-                    color: '#fff',
-                    borderRadius: '15px', // 角丸
-                    cursor: 'pointer',
-                  }}/>
-                :  <Editor
-                value={inputCode}
-                onValueChange={handleValueChange}
-                highlight={code => highlight(code, languages.js,'javascript')}
-                padding={10}
-                style={{
-                  fontFamily: '"Fira code", "Fira Mono", monospace',
-                  fontSize: 15,
-                  minHeight: '24rem', // エディタの最小高さを設定
-                  overflow: 'auto',
-                  backgroundColor: '#2D2D2D', // 背景色
-                  color: '#fff',
-                  borderRadius: '15px', // 角丸
-                }}/>}</Box>
+                {/* エディターを扱うコンポーネントだけどわざわざする必要ない気もする。むしろ読む側としてはEditorのままここでCodeEditorコンポーネントをやっている事をした方が分かりやす気もする */}
+                <CodeEditor
+                  inputCode={inputCode}
+                  snippetOutput={snippetOutput}
+                  onCodeChange={handleCodeChange}
+                  isUpdated={isUpdated}
+                  highlight={highlightWithPrism}
+                /></Box>
               </Box>
-                <Flex flex="1" direction="column" p={3} m={0} maxWidth="700px" >
-                <Box width="500px" position="relative" display="inline-block">
-                <Box
-                    shadow="lg"
-                    borderRadius="sm"
-                    position="absolute"
-                    zIndex="0"
-                    height="100%" // ボタンと同じ高さ
-                    width="100%" // ボタンと同じ幅
-                    border="15px solid  rgba(74, 74, 74, 0.25)" // ボーダーライン
-                    left="12px" // 右にずらす
-                    top="12px" // 上にずらす
-                  />
-                <Box shadow="lg" borderColor="gray.200" borderRadius="3px" p={10} bg="white" flex="1" position="relative" >
+              {/* 変換フォーム */}
+              <Flex flex="1" direction="column" p={3} m={0} maxWidth="700px">
+            <Box width="500px" position="relative" display="inline-block">
+              <Box
+                shadow="lg"
+                borderRadius="sm"
+                position="absolute"
+                zIndex="0"
+                height="100%" 
+                width="100%" 
+                border="15px solid rgba(74, 74, 74, 0.25)" 
+                left="12px" 
+                top="12px" 
+              />  
+              <Box shadow="lg" borderColor="gray.200" borderRadius="3px" p={10} bg="white" flex="1" position="relative">
                 <Flex justifyContent="space-between">
-                <Text fontSize="lg" fontWeight="semibold" >変換フォーム</Text>
-                <HStack>
-                <Button  size='sm'
-                  _hover={{ cursor: 'pointer' }}
-                    isDisabled={isLoading}
-                    onClick={updateCode}
-                    sx={{
-                      width: '70px',
-                      height: '39px',
-                      transition: "transform 0.9s ease, box-shadow 0.9s ease", 
-                      backgroundImage: "linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)",
-                      color: "white",
-                      _hover: {
-                        boxShadow: "md",
-                      },
-                      _active: {
-                        bgGradient: "linear-gradient(45deg, #e6683c 0%, #dc2743 25%, #cc2366 50%, #bc1888 75%, #f09433 100%)",
-                        transform: "scale(0.9)",
-                      }
-                    }} >{isLoading ? '処理中...':'変換'}
-                  </Button>
-                  <IconButton
-                  _hover={{ cursor: 'pointer' }}
-                          aria-label="追加"
-                          icon={<AddIcon/>}
-                          size='sm'
-                          sx={{
-                              width: '40px',
-                              height: '39px',
-                            }}
-                            onClick={addForm} />
-                </HStack>
+                  <Text fontSize="lg" fontWeight="semibold">変換フォーム</Text>
+                  <HStack>
+                    <ConversionButton
+                      isLoading={isLoading}
+                      onAddForm={addForm}
+                      onUpdateCode={updateCode}
+                    />
+                  </HStack>
                 </Flex>
-                    {/* フォーム */}
-                    <Divider my={4} sx={{  borderColor: "gray.400" }}/>
-                      {/* Prefix */}
-                      <Flex alignItems="center" gap="4">
-                      <Box >
-                        <Text fontSize="sm" fontWeight="semibold">Prefix</Text>
-                        <Input
-                          value={prefix}
-                          onChange={(e) => handlePrefixChange(e.target.value)}
-                          placeholder="Prefix"
-                          size="sm"
-                          sx={{  width: '150px', }}
-                        />
-                      </Box>
-                      {/* スニペット名 */}
-                      <Box>
-                        <Text fontSize="sm" fontWeight="semibold">スニペット名</Text>
-                        <Input
-                          value={snippetName}
-                          onChange={(e) => handleSnippetChange(e.target.value)}
-                          placeholder="Snippet"
-                          size="sm"
-                          sx={{  width: '120px', }}
-                        />
-                      </Box>
-                      </Flex>
-                    {wordsToReplace.map((wordsToReplace, index) => (
-                  <VStack spacing={4} mt={3} align="stretch" key={index}>
-                    <HStack spacing={4} alignItems="center">
-                      {/* 変換したい単語 */}
-                      <Box >
-                        <Text fontSize="sm" fontWeight="semibold">変換したい単語</Text>
-                        <Input
-                          value={wordsToReplace.word}
-                          onChange={(e) => handleWordChange(index, e.target.value)}
-                          placeholder="変換したい単語"
-                          size="sm"
-                          sx={{  width: '150px', }}
-                        />
-                      </Box>
-                      {/* 変換形式 */}
-                      <Box >
-                        <Text fontSize="sm" fontWeight="semibold">変換形式</Text>
-                        <Select
-                          placeholder="Default"
-                          size="sm"
-                          sx={{  width: '120px', }}
-                          onChange={(e) => handleCaseFormatChange(index, e.target.value)}
-                        >
-                          <option value="Pascal">Pascal</option>
-                          <option value="Choice">Choice</option>
-                        </Select>
-                      </Box>
-                      {/* 順序 */}
-                      <Box >
-                        <Text fontSize="sm" fontWeight="semibold">順序</Text>
-                        <NumberInput
-                          onChange={(_valueAsString, valueAsNumber) => handleInputOrderChange(valueAsNumber, wordsToReplace.id)}
-                          min={1}
-                          max={10}
-                          defaultValue={wordsToReplace.inputOrder}
-                          size="sm"
-                          sx={{  width: '90px', }}
-                        >
-                          <NumberInputField placeholder="#1" />
-                          <NumberInputStepper>
-                            <NumberIncrementStepper />
-                            <NumberDecrementStepper />
-                          </NumberInputStepper>
-                        </NumberInput>
-                      </Box>
-                          {/* 削除ボタン */}
-                          <IconButton
-                          aria-label="削除"
-                          icon={<DeleteIcon />}
-                          size='sm'
-                          sx={{
-                            right:'10px',
-                            width: '40px',
-                            height: '30px',
-                            top: '9px',
-                          }}
-                          onClick={() => removeForm(wordsToReplace.id)}
-                            />
-                    </HStack>
-                  </VStack>
+                <Divider my={4} sx={{ borderColor: "gray.400" }}/>
+                <ConversionInput
+                  prefix={prefix}
+                  snippetName={snippetName}
+                  onPrefixChange={handlePrefixChange}
+                  onSnippetChange={handleSnippetChange}
+                />
+                {wordsToReplace.map((word, index) => (
+                  <WordForm
+                    key={index}
+                    word={word.word}
+                    id={word.id}
+                    caseFormat={word.caseFormat}
+                    inputOrder={word.inputOrder}
+                    onWordChange={(value) => handleWordChange(index, value)}
+                    onCaseFormatChange={(value) => handleCaseFormatChange(index, value)}
+                    onInputOrderChange={(value, id) => handleInputOrderChange(value, id)}
+                    onRemove={() => removeForm(word.id)}
+                  />
                 ))}
-                </Box>
-                </Box>
-            </Flex>
-        </Box>
+              </Box>
+            </Box>
+          </Flex>
       </Box>
+    </Box>
   )
 }
-
 export default EditorContainer

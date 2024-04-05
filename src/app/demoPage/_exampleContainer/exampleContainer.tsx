@@ -53,8 +53,8 @@ const ExampleContainer = () => {
               animate={{ opacity: 0.4 }}
               exit={{ opacity: 0, transition: { duration: 0.5 } }}
               transition={{ 
-                duration: 0.8, // アニメーションの持続時間を1秒に設定
-                delay:6, // ここでアニメーション開始までの遅延時間を設定
+                duration: 0.8, 
+                delay:6, 
                 ease: "easeInOut"}} 
               style={{
                 position: 'fixed',
@@ -68,12 +68,12 @@ const ExampleContainer = () => {
               onClick={handleSetOverLay} 
             />
               <Box m="9" style={{
-                  position: 'fixed', // 要素をビューポートに対して固定
-                  top: '86%', // 上から50%の位置
-                  left: '48%', // 左から50%の位置
-                  transform: 'translate(-50%, -50%)', // 要素の中心を正確にビューポートの中央に合わせる
-                  zIndex: 2, // オーバーレイより上に表示
-                 }}>
+                  position: 'fixed',
+                  top: '86%', 
+                  left: '48%', 
+                  transform: 'translate(-50%, -50%)', 
+                  zIndex: 2, 
+                  }}>
                 <ZoomIn><TryItOutLinkContainer /></ZoomIn>
               </Box>
           </>

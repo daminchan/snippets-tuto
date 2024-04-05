@@ -1,6 +1,19 @@
 import { Box, Heading, Text, List, ListItem, ListIcon, Flex, VStack, HStack } from '@chakra-ui/react';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import React, { useEffect, useRef, useState } from 'react';
+import UpdateEntry from './_updateEntry/UpdateEntry';
+
+interface Detail {
+    title: string;
+    description: string;
+  }
+  
+  interface Update {
+    date: string;
+    details: Detail[];
+  }
+  
+  type GetDetailStyleFunction = (title: string) => { color: string; fontWeight: string };
 
 
 
@@ -85,7 +98,7 @@ const UpdateInfo = () => {
 
 
     <Box display="flex" flexDirection="column" alignItems="center" width="100%"padding="12" >
-      <Box width="100%" maxWidth="700px"position="relative"> {/* maxWidthを調整してコンテンツの幅を制御 */}
+      <Box width="100%" maxWidth="700px"position="relative"> 
       <Box
             maxHeight="300px"
             overflowY="auto"
@@ -114,32 +127,14 @@ const UpdateInfo = () => {
               right="0"
               bottom="0"
               height="30px"
-              pointerEvents="none" // ぼやけ効果がマウスイベントを阻害しないように
-              background="linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1))" // ぼやけ効果
+              pointerEvents="none"
+              background="linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1))"
             />
         <List spacing={3} m={6} textAlign="left">
+            {/* 最初フラグメントで囲んでいたらKey割り当てられていないってエラーが出て困った。
+            フラグメントを削除したら解決した */}
           {updates.map((update, index) => (
-            <ListItem key={index}>
-              <Text fontSize="lg" fontWeight="normal" fontStyle="italic" color="gray.600"pb={1}>{update.date}</Text>
-              <Flex direction="column" align="flex-start" gap="1">
-                {update.details.map((detail, detailIndex) => {
-                  const style = getDetailStyle(detail.title);
-                  return(
-                    <Flex key={detailIndex} justifyContent="flex-start" alignItems="flex-start">
-                      <HStack spacing={3} alignItems="flex-start">
-                      <Box flexShrink={0}>
-                      <Text color={style.color} fontWeight={style.fontWeight}>
-                      <ListIcon as={InfoOutlineIcon} color="blue.500" />
-                        {detail.title}<Box as="span" color="gray.500" fontWeight="bold">:</Box></Text>
-                        </Box>
-                        <Box maxW="700px" > {/* 最大幅をsmに設定し、単語が長い場合は改行する */}
-                      <Text color="gray.600">{detail.description}</Text>
-                      </Box>
-                      </HStack>
-                    </Flex>
-                  )})}
-              </Flex>
-            </ListItem>
+            <UpdateEntry key={index} update={update} getDetailStyle={getDetailStyle}></UpdateEntry>
           ))}
         </List>
         </Box>

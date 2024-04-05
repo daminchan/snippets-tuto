@@ -4,14 +4,8 @@ import { Box, Button, Text, Link, VStack } from '@chakra-ui/react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 
 const TryItOutLinkContainer = () => {
-//   const bgColor = useColorModeValue('blue.500', 'blue.200'); // ライトモードとダークモードで背景色を変える
-//   const textColor = useColorModeValue('white', 'gray.800'); // ライトモードとダークモードでテキスト色を変える
-
   return (
-  
- <Box width="600px"shadow="base"  borderColor="gray.200" borderRadius="15px" p={3} bg="white" margin="auto" 
-    
-    >
+  <Box width="600px"shadow="base"  borderColor="gray.200" borderRadius="15px" p={3} bg="white" margin="auto">
       <VStack spacing={4}>
         <Text fontSize="xl" fontWeight="bold" >
           実際に利用してみよう！
@@ -24,9 +18,6 @@ const TryItOutLinkContainer = () => {
         </Button>
       </VStack>
     </Box>
-    
-   
-  
   );
 };
 
