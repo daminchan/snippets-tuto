@@ -14,5 +14,4 @@ const page = () => {
       </Box>
   )
 }
-
 export default page

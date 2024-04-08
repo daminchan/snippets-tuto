@@ -1,8 +1,36 @@
 "use client"
-import Image from "next/image";
-import Link from "next/link";
-import { Box, Button, ButtonGroup, Select, Stack } from '@chakra-ui/react'
-import FeatureDemoPage from "./_featureDemoPage/FeatureDemoPage";
+import { Box } from '@chakra-ui/react'
+import DemoPage from "./_demoPage/DemoPage";
+
+// プロジェクト構造ガイド：
+// - "_"(アンダースコア)で始まるディレクトリ: 特定のページ内で使用されるUIパーツ（例: ボタン、セクション）を格納します。
+// - アンダースコアがないディレクトリ: アプリケーションの各ページを表します。これらは、訪問者がナビゲーションやリンクを介してアクセスする実際のページです。
+// - コンポーネント例:
+//   - DemoPage: ホームページを表し、アプリケーションで最初に表示されるページです。
+//   - HeroSection: ページのタイトルやキャッチコピーを表示するセクション。
+//   - updateInfo: 最新情報やアップデート情報を表示するコンポーネント。
+//   - editPage: アプリケーション内の編集可能なページや機能に関連するコンポーネント群。
+//
+// 注意: 'page.tsx' ファイルは、アンダースコアがないディレクトリに属します。
+
+//反省点:
+// コンポーネント構造について：
+// HomePageコンポーネントを作りその中に、DemoPage HeroSection updateInformationに分ければよかったかもしれない。 
+// コンポーネントのtsxファイル名は、MyComponent.tsxのようにパスカルケースで統一すべきだったかもしれない。
+//editorコンポーネントとDemoコンポーネントの各種対応しているコンポーネント（フォームやエディター）等、命名が違う所を合わせて規則性のあるものにすべきだった。
+//demoPage２つあるけど一つはルートディレクトリとして一応残してある。
+
+
+//ローカル立ち上げ時、_demoPageコンポーネントが一回目表示されない事がある…？
+
+
+
+// デモンストレーションの効果についての反省点：
+// 現在のデモは既に機能に精通しているユーザーにとっては理解しやすいものの、
+// 新規ユーザーにはその価値を十分に伝えるものになっていないかもしれない
+// 「へぇ〜便利そう、使ってみよう、どのような動きになるのかな？」と思わせるような、
+//直感的でわかりやすく興味をもってもらえるようなデモンストレーションを目指すべき
+
 
 
 
@@ -11,9 +39,8 @@ export default function Home() {
   return (
     <main>
           <Box>
-            <FeatureDemoPage/>
+            <DemoPage/>
           </Box>
     </main>
   );
 }
-

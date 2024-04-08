@@ -12,7 +12,6 @@ const page = () => {
   return (
     <div>
         <HeroSection/>
-        
         <ExampleContainer/>
     </div>
   )

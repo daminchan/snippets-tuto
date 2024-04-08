@@ -2,44 +2,27 @@
 import React, {  useEffect, useRef, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid';
 import {
-    FormControl,
-    FormLabel,
-    FormErrorMessage,
-    FormHelperText,
-    Button,
-    Select,
     Box,
-    VStack,
     Text,
     HStack,
     Flex,
-    NumberInput,
-    NumberInputField,
-    NumberInputStepper,
-    NumberIncrementStepper,
-    NumberDecrementStepper,
-    IconButton,
     Divider,
     useToast,
   } from '@chakra-ui/react'
-  import { Input } from '@chakra-ui/react'
-  import Editor from 'react-simple-code-editor';
-  import { highlight, languages } from 'prismjs/components/prism-core';
+ 
   import Prism from 'prismjs';
   import 'prismjs/components/prism-clike';
   import 'prismjs/components/prism-javascript';
   import 'prismjs/themes/prism-okaidia.css';
-  import { DeleteIcon, AddIcon , CopyIcon } from '@chakra-ui/icons';
   import StepOneAnimationMessage from '@/components/animation/stepOneAnimationMessage';
   import StepTwoAnimationMessage from '@/components/animation/stepTwoAnimationMessage';
   import StepThreeAnimationMessage from '@/components/animation/stepThreeAnimationMessage';
-  import { AnimatePresence ,motion,useAnimation } from 'framer-motion';
-
-import ActionButton from './_codeDisplayComponents/_actionButton/ActionButton';
-import CodeEditor from './_codeDisplayComponents/_codeEditor/CodeEditor';
-import ConversionInput from './_conversionFormComponents/conversionInput/ConversionInput';
-import WordForm from './_conversionFormComponents/wordForm/WordForm';
-import ConversionButton from './_conversionFormComponents/conversionButton/ConversionButton';
+  import { AnimatePresence } from 'framer-motion';
+  import ActionButton from './_codeDisplayComponents/_actionButton/ActionButton';
+  import CodeEditor from './_codeDisplayComponents/_codeEditor/CodeEditor';
+  import ConversionInput from './_conversionFormComponents/conversionInput/ConversionInput';
+  import WordForm from './_conversionFormComponents/wordForm/WordForm';
+  import ConversionButton from './_conversionFormComponents/conversionButton/ConversionButton';
 
   
 
