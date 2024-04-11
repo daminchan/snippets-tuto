@@ -1,8 +1,8 @@
 'use client';
 import { Box } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import FadeIn from '@/components/Animation/FadeIn';
-import ZoomIn from '@/components/Animation/ZoomIn';
+import FadeIn from '@/components/animation/fadeIn';
+import ZoomIn from '@/components/animation/ZoomIn';
 import { motion, AnimatePresence } from 'framer-motion';
 import DemoCodeDisplayComponents from './_demoCodeDisplayComponents/DemoCodeDisplayComponents';
 import DemoCompletionCTA from './_demoCompletionCTA/DemoCompletionCTA';

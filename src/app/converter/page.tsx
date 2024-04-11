@@ -1,11 +1,11 @@
 'use client';
 import React from 'react';
 import { Box, Flex, Text } from '@chakra-ui/react';
-import FadeIn from '@/components/Animation/FadeIn';
+import FadeIn from '@/components/animation/fadeIn';
 
 import ConversionComponents from '../../features/converter/components/ConversionComponents/ConversionComponents';
 import { UIStateProvider } from '@/features/converter/hooks/useUIState';
-import HeroSection from '@/components/HeroSection/HeroSection';
+import HeroSection from '@/components/heroSection/HeroSection';
 
 const page = () => {
   return (

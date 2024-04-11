@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import ExampleContainer from './_exampleContainer/exampleContainer';
-import HeroSection from '@/components/HeroSection/HeroSection';
+import HeroSection from '@/components/heroSection/HeroSection';
 
 const page = () => {
   return (

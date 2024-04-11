@@ -3,7 +3,7 @@
 import React from 'react';
 import UpdateInfo from './_updateInfo/UpdateInfo';
 import LiveDemo from './_liveDemo/LiveDemo';
-import FadeIn from '@/components/Animation/FadeIn';
+import FadeIn from '@/components/animation/fadeIn';
 import { Box } from '@chakra-ui/react';
 
 const DemoPage = () => {

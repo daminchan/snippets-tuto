@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Box, Text, Flex, Divider } from '@chakra-ui/react';
-import FadeIn from '@/components/Animation/FadeIn';
+import FadeIn from '@/components/animation/fadeIn';
 import DemoCodeEditorComponent from './_demoCodeEditorComponent/DemoCodeEditorComponent';
 import DemoConversionFormComponents from './_demoCodeEditorComponent/_demoConversionFormComponents/DemoConversionFormComponents';
 

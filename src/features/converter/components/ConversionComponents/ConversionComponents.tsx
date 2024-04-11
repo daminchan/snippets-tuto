@@ -1,6 +1,6 @@
 'use client';
 import * as Converter from '@/features/converter/components/index';
-import * as Animation from '@/components/Animation/index';
+import * as Animation from '@/components/animation/index';
 //試みた事。
 //hooksを作成して、ConverterComponents内をすっきりさせてみた。
 //import文も長くなるため、indexファイルから一括でインポートするようにしてみた
