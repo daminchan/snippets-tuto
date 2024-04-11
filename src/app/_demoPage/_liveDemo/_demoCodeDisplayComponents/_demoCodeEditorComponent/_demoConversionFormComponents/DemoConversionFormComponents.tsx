@@ -1,5 +1,5 @@
 'use client';
-import ClickAnimationMessage from '@/components/animation/clickAnimationMessage';
+import ClickAnimationMessage from '@/components/animation/ClickAnimationMessage';
 import {
   Box,
   Button,

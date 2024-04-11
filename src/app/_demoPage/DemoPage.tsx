@@ -3,13 +3,12 @@
 import React from 'react';
 import UpdateInfo from './_updateInfo/UpdateInfo';
 import LiveDemo from './_liveDemo/LiveDemo';
-import FadeIn from '@/components/animation/fadeIn';
+import FadeIn from '@/components/animation/FadeIn';
 import { Box } from '@chakra-ui/react';
 
 const DemoPage = () => {
   return (
     <Box>
-      {/* <HeroSection /> */}
       <UpdateInfo />
       <LiveDemo />
     </Box>

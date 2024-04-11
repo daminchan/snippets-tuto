@@ -1,5 +1,5 @@
-import stepOneAnimationMessage from './stepOneAnimationMessage';
-import stepTwoAnimationMessage from './stepTwoAnimationMessage';
-import stepThreeAnimationMessage from './stepThreeAnimationMessage';
+import StepOneAnimationMessage from './StepOneAnimationMessage';
+import StepTwoAnimationMessage from './StepTwoAnimationMessage';
+import StepThreeAnimationMessage from './StepThreeAnimationMessage';
 
-export { stepOneAnimationMessage, stepTwoAnimationMessage, stepThreeAnimationMessage };
+export { StepOneAnimationMessage, StepTwoAnimationMessage, StepThreeAnimationMessage };

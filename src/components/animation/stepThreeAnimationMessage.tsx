@@ -2,8 +2,6 @@ import React from 'react';
 import { Image, Text, VStack } from '@chakra-ui/react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-//無理やり対応している。
-//初期値にアイコンが変な所に出ているためアニメーションの開始を遅らせて対応
 const StepThreeAnimationMessage = () => {
   return (
     <motion.div

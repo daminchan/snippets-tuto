@@ -2,9 +2,9 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import PreviewContainer from '../_previewContainer/PreviewContainer';
-import FadeIn from '@/components/animation/fadeIn';
+import FadeIn from '@/components/animation/FadeIn';
 import TryItOutLinkContainer from '../_tryItoutLinkContainer/tryItOutLinkContainer';
-import ZoomIn from '@/components/animation/zoomIn';
+import ZoomIn from '@/components/animation/ZoomIn';
 import { motion, AnimatePresence } from 'framer-motion';
 import TryItOutLinkSideContainer from '../_tryItoutLinksideContainer/tryItoutLinksideContainer';
 
