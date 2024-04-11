@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Flex, Text } from '@chakra-ui/react';
 
-const HeroSection = () => {
+const Section = () => {
   return (
     <Box>
       <Flex minHeight="auto" direction="column" p={4}>
@@ -26,4 +26,4 @@ const HeroSection = () => {
   );
 };
 
-export default HeroSection;
+export default Section;
