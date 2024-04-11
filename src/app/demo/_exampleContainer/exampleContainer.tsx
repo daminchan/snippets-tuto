@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import PreviewContainer from '../_previewContainer/PreviewContainer';
 import FadeIn from '@/components/animation/fadeIn';
 import TryItOutLinkContainer from '../_tryItoutLinkContainer/tryItOutLinkContainer';
-import ZoomIn from '@/components/animation/ZoomIn';
+import ZoomIn from '@/components/animation/zoomIn';
 import { motion, AnimatePresence } from 'framer-motion';
 import TryItOutLinkSideContainer from '../_tryItoutLinksideContainer/tryItoutLinksideContainer';
 
