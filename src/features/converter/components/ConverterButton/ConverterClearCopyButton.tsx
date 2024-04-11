@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { Button, HStack, IconButton } from '@chakra-ui/react';
+import { Button, HStack } from '@chakra-ui/react';
 import { CopyIcon } from '@chakra-ui/icons';
 
 interface ActionButtonsProps {

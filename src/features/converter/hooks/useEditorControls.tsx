@@ -1,11 +1,8 @@
 import { useToast } from '@chakra-ui/react';
-import { Dispatch, SetStateAction, useEffect, useRef } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { useUIState } from './useUIState';
 import { v4 as uuidv4 } from 'uuid';
-import Prism from 'prismjs';
-import 'prismjs/components/prism-clike';
-import 'prismjs/components/prism-javascript';
-import 'prismjs/themes/prism-okaidia.css';
+
 interface wordsToReplace {
   word: string;
   caseFormat: string;
@@ -68,20 +65,5 @@ export const useEditorControls = ({
     }
   };
 
-  // CodeEditorコンポーネントに関わる記述
-  //   const highlightWithPrism = (code: string) => Prism.highlight(code, Prism.languages.javascript, 'javascript');
-  //   const handleCodeChange = (code: string) => {
-  //     if (isUpdated) {
-  //       //復習メモ：if文は真偽値に基づいて条件分岐を行う
-  //       //true であれば、if 文の中のブロックが実行。false の場合は、else ブロック（存在する場合）が実行。
-  //       //この場合はisUpdatedの真偽値を参照
-  //       setSnippetOutput(code);
-  //     } else {
-  //       setInputCode(code);
-  //     }
-  //     setIsIconVisible(code === '');
-  //     setIsIconVisibleTwo(code !== '');
-  //     setIsIconVisibleThree(false);
-  //   };
   return { clearCode, copyToClipboard };
 };

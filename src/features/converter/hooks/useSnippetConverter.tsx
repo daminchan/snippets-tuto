@@ -1,10 +1,5 @@
-import { useToast } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useEffect, useRef } from 'react';
 import { useUIState } from './useUIState';
-import Prism from 'prismjs';
-import 'prismjs/components/prism-clike';
-import 'prismjs/components/prism-javascript';
-import 'prismjs/themes/prism-okaidia.css';
 
 interface wordsToReplace {
   word: string;
@@ -32,7 +27,7 @@ export const useSnippetConverter = ({
   prefix,
   snippetName,
 }: UseSnippetConverterProps) => {
-  const { isLoading, isUpdated, isIconVisibleThree, setIsLoading, setIsUpdated, setIsIconVisibleThree } = useUIState();
+  const { setIsLoading, setIsUpdated, setIsIconVisibleThree } = useUIState();
 
   //変換フォーマットを扱う関数
   const createCaseFormat = (wordsToReplace: wordsToReplace) => {

@@ -1,6 +1,3 @@
-import { useRef } from 'react';
-import { useToast } from '@chakra-ui/react';
-
 interface UseConversionPrefixFormProps {
   setPrefix: React.Dispatch<React.SetStateAction<string>>;
   setSnippetName: React.Dispatch<React.SetStateAction<string>>;

@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { Box, Flex, Text } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import FadeIn from '@/components/animation/FadeIn';
 
 import ConversionComponents from '../../features/converter/components/ConversionComponents/ConversionComponents';

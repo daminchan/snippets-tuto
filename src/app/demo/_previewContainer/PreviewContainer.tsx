@@ -2,30 +2,19 @@
 import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-  FormHelperText,
   Button,
   Select,
-  Stack,
   Box,
   VStack,
   Text,
-  RadioGroup,
-  Radio,
   HStack,
-  Textarea,
   Flex,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
-  Spacer,
-  IconButton,
   Divider,
-  EditablePreview,
 } from '@chakra-ui/react';
 import { Input } from '@chakra-ui/react';
 import Editor from 'react-simple-code-editor';
