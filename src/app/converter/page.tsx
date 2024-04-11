@@ -10,7 +10,7 @@ import HeroSection from '@/components/HeroSection/HeroSection';
 const page = () => {
   return (
     <Box bg="gray.50" minHeight="100vh">
-      <HeroSection />
+      {/* <HeroSection /> */}
       <FadeIn delay={0.33}>
         <UIStateProvider>
           <ConversionComponents />

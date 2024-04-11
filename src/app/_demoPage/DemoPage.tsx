@@ -1,5 +1,5 @@
 'use client';
-import HeroSection from '@/components/HeroSection/HeroSection';
+// import HeroSection from '@/components/HeroSection/HeroSection';
 import React from 'react';
 import UpdateInfo from './_updateInfo/UpdateInfo';
 import LiveDemo from './_liveDemo/LiveDemo';
@@ -9,7 +9,7 @@ import { Box } from '@chakra-ui/react';
 const DemoPage = () => {
   return (
     <Box>
-      <HeroSection />
+      {/* <HeroSection /> */}
       <UpdateInfo />
       <LiveDemo />
     </Box>
