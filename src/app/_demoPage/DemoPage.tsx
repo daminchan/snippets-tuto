@@ -1,17 +1,17 @@
-"use client"
-import HeroSection from '@/components/heroSection/heroSection';
-import React  from 'react';
+'use client';
+import HeroSection from '@/components/HeroSection/HeroSection';
+import React from 'react';
 import UpdateInfo from './_updateInfo/UpdateInfo';
 import LiveDemo from './_liveDemo/LiveDemo';
-import FadeIn from '@/components/animation/fadeIn';
+import FadeIn from '@/components/Animation/FadeIn';
 import { Box } from '@chakra-ui/react';
 
 const DemoPage = () => {
   return (
     <Box>
-        <HeroSection/>
-        <UpdateInfo/>
-        <LiveDemo/>
+      <HeroSection />
+      <UpdateInfo />
+      <LiveDemo />
     </Box>
   );
 };
