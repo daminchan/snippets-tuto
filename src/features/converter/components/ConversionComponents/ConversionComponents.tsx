@@ -1,6 +1,8 @@
 'use client';
 import * as Converter from '@/features/converter/components/index';
 import * as Effects from '@/components/effects/index';
+import * as ConverterHooks from '@/features/converter/hooks/index';
+import { commonBoxStyles, detailedBoxStyles, shadowOverlayBoxStyles } from './ConversionComponentsStyles';
 //試みた事。
 //hooksを作成して、ConverterComponents内をすっきりさせてみた。
 //import文も長くなるため、indexファイルから一括でインポートするようにしてみた
@@ -9,42 +11,22 @@ import * as Effects from '@/components/effects/index';
 //例：同じページのフォーム管理でも、複数種類がある場合、分けた方がいいのか？分けすぎると結局親コンポーネント
 //でのインポート数が増えてコードが煩雑になり、元も子もなくなるのではないか？という懸念
 //Eslintから初めてだらけで記事を読んだりやAIに質問しながらなので追いついていない・抜けているところがあると思うので足りないところは遠慮しないで指摘して欲しい。
-
-import React, { useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import React from 'react';
 import { Box, Text, HStack, Flex, Divider } from '@chakra-ui/react';
 import { AnimatePresence } from 'framer-motion';
 import Prism from 'prismjs';
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism-okaidia.css';
-
-import { useConversionPrefixForm } from '../../hooks/useConversionPrefixForm';
-import { useConversionForm } from '../../hooks/useConversionForm';
-import { useSnippetConverter } from '../../hooks/useSnippetConverter';
 import { useUIState } from '../../hooks/useUIState';
-import { useEditorControls } from '../../hooks/useEditorControls';
-
+import { useFormState } from '../../hooks/useFormState';
 import ConverterCodeEditor from '../ConverterCodeEditor/ConverterCodeEditor';
 
-interface wordsToReplace {
-  word: string;
-  caseFormat: string;
-  id: string; //uuidがstring型を求める為
-  inputOrder: number;
-}
-
 const ConversionComponents = () => {
-  //エディターに表示・読み込ませるためのコードを管理
-  const [snippetOutput, setSnippetOutput] = useState('');
-  const [inputCode, setInputCode] = useState('');
-  //変換フォームを管理
-  const [wordsToReplace, setWordsToReplace] = useState<wordsToReplace[]>([
-    { word: '', caseFormat: 'default', id: uuidv4(), inputOrder: 1 },
-  ]);
-  //スニペット、prefixを管理
-  const [prefix, setPrefix] = useState('');
-  const [snippetName, setSnippetName] = useState('');
+  //フォーム関連の状態管理
+  const { wordsToReplace, prefix, snippetName, setInputCode, inputCode, setSnippetOutput, snippetOutput } =
+    useFormState();
+
   //アニメーションUIの状態管理
   const {
     isLoading,
@@ -56,51 +38,15 @@ const ConversionComponents = () => {
     setIsIconVisibleThree,
     setIsIconVisibleTwo,
   } = useUIState();
-
-  //Prefix名インプットフォーム
-  const { handlePrefixChange, handleSnippetChange } = useConversionPrefixForm({
-    setPrefix,
-    setSnippetName,
-  });
-  //変換フォームハンドル、追加・削除
-  const { handleWordChange, handleCaseFormatChange, handleInputOrderChange, removeForm, addForm } = useConversionForm({
-    wordsToReplace,
-    setWordsToReplace,
-    // setIsIconVisible,
-    // setIsIconVisibleTwo,
-    // setIsIconVisibleThree,
-  });
-  //変換ロジックとアップデートボタン
-  const { updateCode } = useSnippetConverter({
-    wordsToReplace,
-    setWordsToReplace,
-    // setIsIconVisible,
-    // setIsIconVisibleTwo,
-    // setIsIconVisibleThree,
-    setSnippetOutput,
-    inputCode,
-    // setIsLoading,
-    // setIsUpdated,
-    prefix,
-    snippetName,
-  });
-  //コードエディター側のクリアボタンとコピーボタン管理
-  const { clearCode, copyToClipboard } = useEditorControls({
-    setInputCode,
-    setPrefix,
-    setSnippetName,
-    setSnippetOutput,
-    setWordsToReplace,
-    snippetOutput,
-  });
-
+  //ハンドラーを管理するフック
+  const { handlePrefixChange, handleSnippetChange, handleWordChange, handleCaseFormatChange, handleInputOrderChange } =
+    ConverterHooks.useConverterHandler();
+  //変換コンポーネントの追加、削除、クリア、コピー機能を管理するフック
+  const { addForm, removeForm, clearCode, copyToClipboard, updateCode } = ConverterHooks.useConverterActions();
   //react-simple-code-editorがhooksなどに関与すると画面が真っ白になる為、一旦このまま
   const highlightWithPrism = (code: string) => Prism.highlight(code, Prism.languages.javascript, 'javascript');
   const handleCodeChange = (code: string) => {
     if (isUpdated) {
-      //復習メモ：if文は真偽値に基づいて条件分岐を行う
-      //true であれば、if 文の中のブロックが実行。false の場合は、else ブロック（存在する場合）が実行。
-      //この場合はisUpdatedの真偽値を参照
       setSnippetOutput(code);
     } else {
       setInputCode(code);
@@ -112,8 +58,7 @@ const ConversionComponents = () => {
 
   return (
     <Box>
-      <Box
-        display="flex"
+      <Flex
         justifyContent="center"
         flexDirection="row"
         bg="gray.50"
@@ -122,91 +67,87 @@ const ConversionComponents = () => {
         alignItems="flex-start"
         gap={5}
       >
-        <Box width="700px" maxWidth="700px" position="relative" display="inline-block" p={3} m={0}>
-          <Box
-            shadow="lg"
-            borderRadius="sm"
-            position="absolute"
-            zIndex="0"
-            height="96%"
-            width="90%"
-            border="32px solid rgba(74, 74, 74, 0.25)"
-            left="70px"
-            top="30px"
-          />
-          <Box shadow="lg" borderColor="gray.200" bg="white" p={10} m={0} position="relative">
-            <Flex justifyContent="space-between">
-              <Text fontSize="lg" fontWeight="semibold">
-                変換したいコードを張り付ける
-              </Text>
-              <AnimatePresence>
-                {isIconVisible && <Effects.StepChanInitial />}
-                {isIconVisibleTwo && <Effects.StepChanNext />}
-                {isIconVisibleThree && <Effects.StepChanComplete />}
-              </AnimatePresence>
-              <Converter.ConverterClearCopyButton onClear={clearCode} onCopy={copyToClipboard} />
-            </Flex>
-            <Divider my={4} sx={{ borderColor: 'gray.400' }} />{' '}
-            <ConverterCodeEditor
-              inputCode={inputCode}
-              snippetOutput={snippetOutput}
-              onCodeChange={handleCodeChange}
-              isUpdated={isUpdated}
-              highlight={highlightWithPrism}
-            />
-          </Box>
-        </Box>
-        {/* 変換フォーム */}
-        <Flex flex="1" direction="column" p={3} m={0} maxWidth="700px">
-          <Box width="500px" position="relative" display="inline-block">
+        <Flex justifyContent="space-between" flexDirection="row" width="80%" maxWidth="1200px" gap={5}>
+          <Box width="700px" maxWidth="700px" {...commonBoxStyles}>
             <Box
-              shadow="lg"
-              borderRadius="sm"
-              position="absolute"
-              zIndex="0"
-              height="100%"
-              width="100%"
-              border="15px solid rgba(74, 74, 74, 0.25)"
-              left="12px"
-              top="12px"
+              {...shadowOverlayBoxStyles}
+              height="96%"
+              width="90%"
+              border="32px solid rgba(74, 74, 74, 0.25)"
+              left="70px"
+              top="30px"
             />
-            <Box shadow="lg" borderColor="gray.200" borderRadius="3px" p={10} bg="white" flex="1" position="relative">
+            <Box {...detailedBoxStyles}>
               <Flex justifyContent="space-between">
                 <Text fontSize="lg" fontWeight="semibold">
-                  変換フォーム
+                  変換したいコードを張り付ける
                 </Text>
-                <HStack>
-                  <Converter.ConverterAddUpdateButton
-                    isLoading={isLoading}
-                    onAddForm={addForm}
-                    onUpdateCode={updateCode}
-                  />
-                </HStack>
+                <AnimatePresence>
+                  {isIconVisible && <Effects.StepChanInitial />}
+                  {isIconVisibleTwo && <Effects.StepChanNext />}
+                  {isIconVisibleThree && <Effects.StepChanComplete />}
+                </AnimatePresence>
+                <Converter.ConverterClearCopyButton onClear={clearCode} onCopy={copyToClipboard} />
               </Flex>
-              <Divider my={4} sx={{ borderColor: 'gray.400' }} />
-              <Converter.ConverterPrefixForm
-                prefix={prefix}
-                snippetName={snippetName}
-                onPrefixChange={handlePrefixChange}
-                onSnippetChange={handleSnippetChange}
+              <Divider my={4} sx={{ borderColor: 'gray.400' }} />{' '}
+              <ConverterCodeEditor
+                inputCode={inputCode}
+                snippetOutput={snippetOutput}
+                onCodeChange={handleCodeChange}
+                isUpdated={isUpdated}
+                highlight={highlightWithPrism}
               />
-              {wordsToReplace.map((word, index) => (
-                <Converter.ConverterWordForm
-                  key={index}
-                  word={word.word}
-                  id={word.id}
-                  caseFormat={word.caseFormat}
-                  inputOrder={word.inputOrder}
-                  onWordChange={(value) => handleWordChange(index, value)}
-                  onCaseFormatChange={(value) => handleCaseFormatChange(index, value)}
-                  onInputOrderChange={(value, id) => handleInputOrderChange(value, id)}
-                  onRemove={() => removeForm(word.id)}
-                />
-              ))}
             </Box>
           </Box>
+          {/* 変換フォーム */}
+          <Flex flex="1" direction="column">
+            <Box width="550px" maxWidth="550px" {...commonBoxStyles}>
+              <Box
+                {...shadowOverlayBoxStyles}
+                height="90%"
+                width="91%"
+                border="15px solid rgba(74, 74, 74, 0.25)"
+                left="50px"
+                top="26px"
+              />
+              <Box {...detailedBoxStyles}>
+                <Flex justifyContent="space-between">
+                  <Text fontSize="lg" fontWeight="semibold">
+                    変換フォーム
+                  </Text>
+                  <HStack>
+                    <Converter.ConverterAddUpdateButton
+                      isLoading={isLoading}
+                      onAddForm={addForm}
+                      onUpdateCode={updateCode}
+                    />
+                  </HStack>
+                </Flex>
+                <Divider my={4} sx={{ borderColor: 'gray.400' }} />
+                <Converter.ConverterPrefixForm
+                  prefix={prefix}
+                  snippetName={snippetName}
+                  onPrefixChange={handlePrefixChange}
+                  onSnippetChange={handleSnippetChange}
+                />
+                {wordsToReplace.map((word, index) => (
+                  <Converter.ConverterWordForm
+                    key={index}
+                    word={word.word}
+                    id={word.id}
+                    caseFormat={word.caseFormat}
+                    inputOrder={word.inputOrder}
+                    onWordChange={(value) => handleWordChange(index, value)}
+                    onCaseFormatChange={(value) => handleCaseFormatChange(index, value)}
+                    onInputOrderChange={(value, id) => handleInputOrderChange(value, id)}
+                    onRemove={() => removeForm(word.id)}
+                  />
+                ))}
+              </Box>
+            </Box>
+          </Flex>
         </Flex>
-      </Box>
+      </Flex>
     </Box>
   );
 };

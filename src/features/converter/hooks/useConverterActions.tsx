@@ -1,36 +1,87 @@
-import { Dispatch, SetStateAction, useEffect, useRef } from 'react';
+import { useRef } from 'react';
+import { useToast } from '@chakra-ui/react';
+import { v4 as uuidv4 } from 'uuid';
 import { useUIState } from './useUIState';
+import { useFormState } from './useFormState';
 
-interface wordsToReplace {
+interface WordsToReplace {
   word: string;
   caseFormat: string;
   id: string;
   inputOrder: number;
 }
 
-interface UseSnippetConverterProps {
-  wordsToReplace: { word: string; caseFormat: string; id: string; inputOrder: number }[];
-  setWordsToReplace: Dispatch<SetStateAction<{ word: string; caseFormat: string; id: string; inputOrder: number }[]>>;
-  setSnippetOutput: Dispatch<SetStateAction<string>>;
-  inputCode: string;
-  prefix: string;
-  snippetName: string;
-}
-
-export const useSnippetConverter = ({
-  wordsToReplace,
-  // setIsIconVisibleThree,
-  setSnippetOutput,
-  inputCode,
-  // setIsLoading,
-  // setIsUpdated,
-  prefix,
-  snippetName,
-}: UseSnippetConverterProps) => {
-  const { setIsLoading, setIsUpdated, setIsIconVisibleThree } = useUIState();
-
-  //変換フォーマットを扱う関数
-  const createCaseFormat = (wordsToReplace: wordsToReplace) => {
+export const useConverterActions = () => {
+  const {
+    wordsToReplace,
+    setWordsToReplace,
+    prefix,
+    setPrefix,
+    snippetName,
+    setSnippetName,
+    setSnippetOutput,
+    inputCode,
+    setInputCode,
+    snippetOutput,
+  } = useFormState();
+  const { setIsUpdated, setIsLoading, setIsIconVisibleThree } = useUIState();
+  const toast = useToast();
+  const toastIdRef = useRef<string | number | undefined>();
+  // 変換フォーム条件追加
+  const addForm = () => {
+    const newForm: WordsToReplace = {
+      word: '',
+      caseFormat: 'default',
+      id: uuidv4(),
+      inputOrder: wordsToReplace.length + 1,
+    };
+    setWordsToReplace((prevForms) => [...prevForms, newForm]);
+  };
+  // 変換フォーム条件削除
+  const removeForm = (id: string) => {
+    setWordsToReplace((prevForms) => {
+      const updatedWordsToReplace = prevForms.filter((form) => form.id !== id);
+      return updatedWordsToReplace.map((form, index) => ({
+        ...form,
+        inputOrder: index + 1, // 1から始まる連番に更新
+      }));
+    });
+  };
+  //入力を初期化ボタン
+  const clearCode = () => {
+    const newWordsToReplace: WordsToReplace = { word: '', caseFormat: 'default', id: uuidv4(), inputOrder: 1 };
+    setWordsToReplace([newWordsToReplace]);
+    setInputCode('');
+    setSnippetOutput('');
+    setPrefix('');
+    setSnippetName('');
+    setIsUpdated(false);
+  };
+  //コピー機能
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(snippetOutput);
+      toast({
+        title: 'コピー成功',
+        description: 'コピー完了!!',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
+      });
+    } catch (err) {
+      console.error('クリップボードへのコピーに失敗しました', err);
+      toast({
+        title: 'コピー失敗',
+        description: 'クリップボードへのコピーに失敗しました。',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
+  };
+  const createCaseFormat = (wordsToReplace: WordsToReplace) => {
     switch (wordsToReplace.caseFormat) {
       case 'Pascal':
         return `\${${wordsToReplace.inputOrder}/(.*)/\${${wordsToReplace.inputOrder}:/pascalcase}/}`;
@@ -100,5 +151,5 @@ export const useSnippetConverter = ({
     setIsIconVisibleThree(false);
   };
 
-  return { updateCode };
+  return { addForm, removeForm, clearCode, copyToClipboard, updateCode };
 };

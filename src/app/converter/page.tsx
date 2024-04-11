@@ -5,6 +5,7 @@ import ConversionComponents from '../../features/converter/components/Conversion
 import { UIStateProvider } from '@/features/converter/hooks/useUIState';
 import Section from '@/components/section/Section';
 import Fade from '@/components/effects/Fade';
+import { FormStateProvider } from '@/features/converter/hooks/useFormState';
 
 const page = () => {
   return (
@@ -12,7 +13,9 @@ const page = () => {
       <Section />
       <Fade delay={0.33}>
         <UIStateProvider>
-          <ConversionComponents />
+          <FormStateProvider>
+            <ConversionComponents />
+          </FormStateProvider>
         </UIStateProvider>
       </Fade>
     </Box>
