@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 //無理やり対応している。
 //初期値にアイコンが変な所に出ているためアニメーションの開始を遅らせて対応
-const StepOneAnimationMessage = () => {
+const StepChanInitial = () => {
   return (
     <motion.div
       initial={{ opacity: 0 }} // 初期位置をボタンの上に設定
@@ -36,4 +36,4 @@ const StepOneAnimationMessage = () => {
   );
 };
 
-export default StepOneAnimationMessage;
+export default StepChanInitial;

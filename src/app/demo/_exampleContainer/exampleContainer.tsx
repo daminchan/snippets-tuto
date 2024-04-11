@@ -2,11 +2,11 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import PreviewContainer from '../_previewContainer/PreviewContainer';
-import FadeIn from '@/components/animation/FadeIn';
 import TryItOutLinkContainer from '../_tryItoutLinkContainer/tryItOutLinkContainer';
-import ZoomIn from '@/components/animation/ZoomIn';
 import { motion, AnimatePresence } from 'framer-motion';
 import TryItOutLinkSideContainer from '../_tryItoutLinksideContainer/tryItoutLinksideContainer';
+import Fade from '@/components/effects/Fade';
+import Zoom from '@/components/effects/Zoom';
 
 const ExampleContainer = () => {
   const [showTryOut, setShowTryOut] = useState(false);
@@ -32,7 +32,7 @@ const ExampleContainer = () => {
 
   return (
     <Box>
-      <FadeIn delay={0}>
+      <Fade delay={0}>
         <PreviewContainer
           onButtonClick={() => {
             setShowTryOut(true);
@@ -44,7 +44,7 @@ const ExampleContainer = () => {
             setShotTryOutSidebar(false);
           }}
         />
-      </FadeIn>
+      </Fade>
       <AnimatePresence>
         {showOverLay && (
           <>
@@ -79,9 +79,9 @@ const ExampleContainer = () => {
                 zIndex: 2,
               }}
             >
-              <ZoomIn>
+              <Zoom>
                 <TryItOutLinkContainer />
-              </ZoomIn>
+              </Zoom>
             </Box>
           </>
         )}

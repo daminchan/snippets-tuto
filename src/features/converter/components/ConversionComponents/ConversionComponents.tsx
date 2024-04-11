@@ -1,6 +1,6 @@
 'use client';
 import * as Converter from '@/features/converter/components/index';
-import * as Animation from '@/components/animation/index';
+import * as Effects from '@/components/effects/index';
 //試みた事。
 //hooksを作成して、ConverterComponents内をすっきりさせてみた。
 //import文も長くなるため、indexファイルから一括でインポートするようにしてみた
@@ -140,9 +140,9 @@ const ConversionComponents = () => {
                 変換したいコードを張り付ける
               </Text>
               <AnimatePresence>
-                {isIconVisible && <Animation.StepOneAnimationMessage />}
-                {isIconVisibleTwo && <Animation.StepTwoAnimationMessage />}
-                {isIconVisibleThree && <Animation.StepThreeAnimationMessage />}
+                {isIconVisible && <Effects.StepChanInitial />}
+                {isIconVisibleTwo && <Effects.StepChanNext />}
+                {isIconVisibleThree && <Effects.StepChanComplete />}
               </AnimatePresence>
               <Converter.ConverterClearCopyButton onClear={clearCode} onCopy={copyToClipboard} />
             </Flex>

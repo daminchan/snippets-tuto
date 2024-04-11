@@ -1,22 +1,23 @@
 import React from 'react';
-import { Flex, Button, useBoolean, Image, Text, VStack } from '@chakra-ui/react';
+import { Image, Text, VStack } from '@chakra-ui/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpIcon } from '@chakra-ui/icons';
-const ClickAnimationMessage = () => {
+
+const StepChanComplete = () => {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50 }} // 初期位置をボタンの上に設定
+      initial={{ opacity: 0 }} // 初期位置をボタンの上に設定
       style={{
         position: 'absolute', // 絶対位置
-        top: '0px', // 上方向に20px（ボタンの上）
+        bottom: '90%',
+        left: '147%',
         zIndex: 10, // 他の要素より前面に
         transform: 'translateX(50%)', // X軸の中心を基点にする
-        left: '80%',
+
         justifyContent: 'center',
         alignItems: 'center',
       }}
-      animate={{ opacity: [1, 0, 1] }} // 点滅アニメーションを定義
-      transition={{ repeat: Infinity, duration: 1 }} // 無限に繰り返し、1秒ごとに点滅
+      animate={{ opacity: [0, 1, 0] }} // 点滅アニメーションを定義
+      transition={{ repeat: Infinity, duration: 1, delay: 0 }} // 無限に繰り返し、1秒ごとに点滅
     >
       <VStack>
         <Text
@@ -25,7 +26,7 @@ const ClickAnimationMessage = () => {
             display: 'inline-block', // transform を適用するために必要
           }}
         >
-          click here!!
+          Step.3!!!
         </Text>
         <Image src="/22332633.png" alt="適切な説明文" width={50} height={50}></Image>
       </VStack>
@@ -33,4 +34,4 @@ const ClickAnimationMessage = () => {
   );
 };
 
-export default ClickAnimationMessage;
+export default StepChanComplete;

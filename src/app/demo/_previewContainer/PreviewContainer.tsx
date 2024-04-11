@@ -23,8 +23,9 @@ import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism-okaidia.css';
 import { ArrowForwardIcon, DeleteIcon } from '@chakra-ui/icons';
-import ClickAnimationMessage from '@/components/animation/ClickAnimationMessage';
-import FadeIn from '@/components/animation/FadeIn';
+
+import ClickMessage from '@/components/effects/ClickMessage';
+import Fade from '@/components/effects/Fade';
 interface PreviewContainerProps {
   onButtonClick: () => void;
   onOverLay: () => void;
@@ -150,14 +151,14 @@ const PreviewContainer: React.FC<PreviewContainerProps> = ({ onButtonClick, onOv
   return (
     <Box>
       <Flex minHeight="auto" direction="column" p={5}>
-        <FadeIn delay={0}>
+        <Fade delay={0}>
           <Text fontSize="2xl" fontWeight="bold" textAlign="center" fontStyle="italic" mb={2}>
             Live Demo
           </Text>
           <Text fontWeight="md" textAlign="center" color="gray.500">
             ライブ デモ
           </Text>
-        </FadeIn>
+        </Fade>
       </Flex>
       <Box display="flex" justifyContent="center" alignItems="center" flexDirection="row" m={6}>
         <Box width="700px">
@@ -222,7 +223,7 @@ const PreviewContainer: React.FC<PreviewContainerProps> = ({ onButtonClick, onOv
                       </NumberInputStepper>
                     </NumberInput>
                   </Box>
-                  <AnimatePresence>{isMessageVisible && <ClickAnimationMessage />}</AnimatePresence>
+                  <AnimatePresence>{isMessageVisible && <ClickMessage />}</AnimatePresence>
                   <Flex flex="1" justifyContent="flex-end" position="relative">
                     <Button
                       onClick={updateCode}

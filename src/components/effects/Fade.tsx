@@ -1,12 +1,11 @@
-// components/FadeIn.js
 import { motion } from 'framer-motion';
 
-interface FadeInProps {
+interface FadeProps {
   children: React.ReactNode;
   delay?: number; // delayはオプショナルプロパティとして定義
 }
 
-const FadeIn: React.FC<FadeInProps> = ({ children, delay = 0 }) => (
+const Fade: React.FC<FadeProps> = ({ children, delay = 0 }) => (
   <motion.div
     initial={{ opacity: 0, y: 15 }}
     animate={{ opacity: 1, y: 0 }}
@@ -20,4 +19,4 @@ const FadeIn: React.FC<FadeInProps> = ({ children, delay = 0 }) => (
   </motion.div>
 );
 
-export default FadeIn;
+export default Fade;
