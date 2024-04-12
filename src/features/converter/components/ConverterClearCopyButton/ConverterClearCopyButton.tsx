@@ -2,7 +2,6 @@
 import React from 'react';
 import { Button, HStack } from '@chakra-ui/react';
 import { CopyIcon } from '@chakra-ui/icons';
-import { gradientButtonStyle } from './ConverterButtonStyles';
 import CustomButton from '@/components/elements/button/CustomButton';
 
 interface ActionButtonsProps {
