@@ -16,7 +16,7 @@ const TryItOutLinkSideContainer = () => {
           bgGradient="linear(to-r, #F58529, #DD2A7B, #8134AF, #515BD4)"
           variant="solid"
           as={Link}
-          href="/editorPage"
+          href="/"
           color="white"
         >
           機能を使ってみる

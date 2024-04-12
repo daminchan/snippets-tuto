@@ -9,7 +9,7 @@ const StepChanComplete = () => {
       style={{
         position: 'absolute', // 絶対位置
         bottom: '90%',
-        left: '147%',
+        left: '159%',
         zIndex: 10, // 他の要素より前面に
         transform: 'translateX(50%)', // X軸の中心を基点にする
 

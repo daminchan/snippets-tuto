@@ -1,25 +1,6 @@
 'use client';
 import React from 'react';
-import {
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-  FormHelperText,
-  Button,
-  Select,
-  Stack,
-  Box,
-  VStack,
-  Text,
-  RadioGroup,
-  Radio,
-  HStack,
-  Textarea,
-  Flex,
-  NumberInput,
-  NumberInputField,
-  Link,
-} from '@chakra-ui/react';
+import { Button, Box, Text, HStack, Flex, Link } from '@chakra-ui/react';
 
 const Header = () => {
   return (
@@ -30,9 +11,9 @@ const Header = () => {
         </Link>
         <Flex gap={4}>
           <HStack spacing={32}>
-            <Link href="/demoPage">
+            <Link href="/lp">
               <Button>
-                <Text color="#F7FAFC">About</Text>
+                <Text color="#F7FAFC">Demo</Text>
               </Button>
             </Link>
             <Text color="#F7FAFC">Dashboard</Text>

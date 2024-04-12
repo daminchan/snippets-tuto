@@ -39,7 +39,7 @@ const ConverterWordForm: React.FC<WordFormProps> = ({
 }) => (
   <VStack spacing={4} align="stretch">
     <HStack spacing={4} alignItems="center">
-      <Box>
+      <Box mt={3}>
         <Text fontSize="sm" fontWeight="semibold">
           変換したい単語
         </Text>

@@ -1,5 +1,10 @@
 'use client';
-import { Box, Link } from '@chakra-ui/react';
+import Fade from '@/components/effects/Fade';
+import Section from '@/components/section/Section';
+import ConversionComponents from '@/features/converter/components/ConversionComponents/ConversionComponents';
+import { FormStateProvider } from '@/features/converter/hooks/useFormState';
+import { UIStateProvider } from '@/features/converter/hooks/useUIState';
+import { Box } from '@chakra-ui/react';
 
 // デモンストレーションの効果についての反省点：
 // 現在のデモは既に機能に精通しているユーザーにとっては理解しやすいものの、
@@ -10,14 +15,15 @@ import { Box, Link } from '@chakra-ui/react';
 export default function Home() {
   return (
     <main>
-      <Box>
-        Homeです
-        <span>
-          <Link href="/converter">アプリ</Link>
-        </span>
-        <span>
-          <Link href="/demo">デモ</Link>
-        </span>
+      <Box bg="gray.50" minHeight="100vh">
+        <Section />
+        <Fade delay={0.33}>
+          <UIStateProvider>
+            <FormStateProvider>
+              <ConversionComponents />
+            </FormStateProvider>
+          </UIStateProvider>
+        </Fade>
       </Box>
     </main>
   );
