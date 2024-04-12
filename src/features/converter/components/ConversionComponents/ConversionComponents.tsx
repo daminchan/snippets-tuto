@@ -2,15 +2,17 @@
 import * as Converter from '@/features/converter/components/index';
 import * as Effects from '@/components/effects/index';
 import * as ConverterHooks from '@/features/converter/hooks/index';
-import { commonBoxStyles, detailedBoxStyles, shadowOverlayBoxStyles } from './ConversionComponentsStyles';
 //試みた事。
 //hooksを作成して、ConverterComponents内をすっきりさせてみた。
-//import文も長くなるため、indexファイルから一括でインポートするようにしてみた
-//アニメーションのステートを管理するhooks、処理関数を管理するhooksに一旦してみた。細分化のバランスが難しい
-// setIsIconVisible等が元からあったアニメーションstate
-//例：同じページのフォーム管理でも、複数種類がある場合、分けた方がいいのか？分けすぎると結局親コンポーネント
-//でのインポート数が増えてコードが煩雑になり、元も子もなくなるのではないか？という懸念
+//import文も長くなるため、indexファイルから一括でインポートするようにしてみた：参考にした記事 https://note.com/ryoppei/n/n2e3e7a66e758#a56a37a1-5d0b-49d6-b1cd-1bfa19a28fa5
+//アニメーションのステート、処理関数に使用するステートをhooks、useContextにしてConverterコンポーネント内の各コンポーネントで共有できるようにしてみた(使い方あっているかどうか知りたい)
+//ロジックHooksを、ハンドルとアクションの二つに分けてみた。(もっと良い感じの分け方とか、テンプレート的な分け方あれば教えてほしい)
+//各フォーム（editorとconverter）のレイアウトBoxをプロジェクト全体で使えると思ったのでShadowBoxと命名して共有できるようにしてみた
+//ボタンに関してはグラデーションだけカスタムCSSとして共有できるようにしてみた。（buttonも全体で共有できるようにした方がいいとは思う。）
+
 //Eslintから初めてだらけで記事を読んだりやAIに質問しながらなので追いついていない・抜けているところがあると思うので足りないところは遠慮しないで指摘して欲しい。
+//ググったり、カーソル先生に質問しながら作成したので、もし間違えているところとかあれば教えてほしい。
+//恐らく、なんでここはきちんとやっているのにここはやってないの？的な箇所あると思う。
 import React from 'react';
 import { Box, Text, HStack, Flex, Divider } from '@chakra-ui/react';
 import { AnimatePresence } from 'framer-motion';
@@ -21,12 +23,12 @@ import 'prismjs/themes/prism-okaidia.css';
 import { useUIState } from '../../hooks/useUIState';
 import { useFormState } from '../../hooks/useFormState';
 import ConverterCodeEditor from '../ConverterCodeEditor/ConverterCodeEditor';
+import ShadowBox from '@/components/elements/box/ShadowBox';
 
 const ConversionComponents = () => {
   //フォーム関連の状態管理
   const { wordsToReplace, prefix, snippetName, setInputCode, inputCode, setSnippetOutput, snippetOutput } =
     useFormState();
-
   //アニメーションUIの状態管理
   const {
     isLoading,
@@ -68,83 +70,71 @@ const ConversionComponents = () => {
         gap={5}
       >
         <Flex justifyContent="space-between" flexDirection="row" width="80%" maxWidth="1200px" gap={5}>
-          <Box width="700px" maxWidth="700px" {...commonBoxStyles}>
-            <Box
-              {...shadowOverlayBoxStyles}
-              height="96%"
-              width="90%"
-              border="32px solid rgba(74, 74, 74, 0.25)"
-              left="70px"
-              top="30px"
+          <ShadowBox>
+            <Flex justifyContent="space-between">
+              <Text fontSize="lg" fontWeight="semibold">
+                変換したいコードを張り付ける
+              </Text>
+              <AnimatePresence>
+                {isIconVisible && <Effects.StepChanInitial />}
+                {isIconVisibleTwo && <Effects.StepChanNext />}
+                {isIconVisibleThree && <Effects.StepChanComplete />}
+              </AnimatePresence>
+              <Converter.ConverterClearCopyButton onClear={clearCode} onCopy={copyToClipboard} />
+            </Flex>
+            <Divider my={4} sx={{ borderColor: 'gray.400' }} />{' '}
+            <ConverterCodeEditor
+              inputCode={inputCode}
+              snippetOutput={snippetOutput}
+              onCodeChange={handleCodeChange}
+              isUpdated={isUpdated}
+              highlight={highlightWithPrism}
             />
-            <Box {...detailedBoxStyles}>
-              <Flex justifyContent="space-between">
-                <Text fontSize="lg" fontWeight="semibold">
-                  変換したいコードを張り付ける
-                </Text>
-                <AnimatePresence>
-                  {isIconVisible && <Effects.StepChanInitial />}
-                  {isIconVisibleTwo && <Effects.StepChanNext />}
-                  {isIconVisibleThree && <Effects.StepChanComplete />}
-                </AnimatePresence>
-                <Converter.ConverterClearCopyButton onClear={clearCode} onCopy={copyToClipboard} />
-              </Flex>
-              <Divider my={4} sx={{ borderColor: 'gray.400' }} />{' '}
-              <ConverterCodeEditor
-                inputCode={inputCode}
-                snippetOutput={snippetOutput}
-                onCodeChange={handleCodeChange}
-                isUpdated={isUpdated}
-                highlight={highlightWithPrism}
-              />
-            </Box>
-          </Box>
+          </ShadowBox>
           {/* 変換フォーム */}
           <Flex flex="1" direction="column">
-            <Box width="550px" maxWidth="550px" {...commonBoxStyles}>
-              <Box
-                {...shadowOverlayBoxStyles}
-                height="90%"
-                width="91%"
-                border="15px solid rgba(74, 74, 74, 0.25)"
-                left="50px"
-                top="26px"
-              />
-              <Box {...detailedBoxStyles}>
-                <Flex justifyContent="space-between">
-                  <Text fontSize="lg" fontWeight="semibold">
-                    変換フォーム
-                  </Text>
-                  <HStack>
-                    <Converter.ConverterAddUpdateButton
-                      isLoading={isLoading}
-                      onAddForm={addForm}
-                      onUpdateCode={updateCode}
-                    />
-                  </HStack>
-                </Flex>
-                <Divider my={4} sx={{ borderColor: 'gray.400' }} />
-                <Converter.ConverterPrefixForm
-                  prefix={prefix}
-                  snippetName={snippetName}
-                  onPrefixChange={handlePrefixChange}
-                  onSnippetChange={handleSnippetChange}
-                />
-                {wordsToReplace.map((word, index) => (
-                  <Converter.ConverterWordForm
-                    key={index}
-                    word={word.word}
-                    id={word.id}
-                    caseFormat={word.caseFormat}
-                    inputOrder={word.inputOrder}
-                    onWordChange={(value) => handleWordChange(index, value)}
-                    onCaseFormatChange={(value) => handleCaseFormatChange(index, value)}
-                    onInputOrderChange={(value, id) => handleInputOrderChange(value, id)}
-                    onRemove={() => removeForm(word.id)}
+            <ShadowBox
+              width="550px"
+              maxWidth="550px"
+              shadowBoxHeight="90%"
+              shadowBoxWidth="91%"
+              shadowBoxBorder="15px solid rgba(74, 74, 74, 0.25)"
+              shadowBoxLeft="50px"
+              shadowBoxTop="26px"
+            >
+              <Flex justifyContent="space-between">
+                <Text fontSize="lg" fontWeight="semibold">
+                  変換フォーム
+                </Text>
+                <HStack>
+                  <Converter.ConverterAddUpdateButton
+                    isLoading={isLoading}
+                    onAddForm={addForm}
+                    onUpdateCode={updateCode}
                   />
-                ))}
-              </Box>
-            </Box>
+                </HStack>
+              </Flex>
+              <Divider my={4} sx={{ borderColor: 'gray.400' }} />
+              <Converter.ConverterPrefixForm
+                prefix={prefix}
+                snippetName={snippetName}
+                onPrefixChange={handlePrefixChange}
+                onSnippetChange={handleSnippetChange}
+              />
+              {wordsToReplace.map((word, index) => (
+                <Converter.ConverterWordForm
+                  key={index}
+                  word={word.word}
+                  id={word.id}
+                  caseFormat={word.caseFormat}
+                  inputOrder={word.inputOrder}
+                  onWordChange={(value) => handleWordChange(index, value)}
+                  onCaseFormatChange={(value) => handleCaseFormatChange(index, value)}
+                  onInputOrderChange={(value, id) => handleInputOrderChange(value, id)}
+                  onRemove={() => removeForm(word.id)}
+                />
+              ))}
+            </ShadowBox>
           </Flex>
         </Flex>
       </Flex>
