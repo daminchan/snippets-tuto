@@ -10,29 +10,29 @@ export const useConverterHandler = () => {
   const toastIdRef = useRef<string | number | undefined>();
   // 変換単語
   const handleWordChange = (index: number, value: string) => {
-    const pattern = /^[a-zA-Z0-9]*$/;
-    if (pattern.test(value)) {
-      const newWord = [...wordsToReplace];
-      newWord[index].word = value;
-      setWordsToReplace(newWord);
-      //アイコンアニメーションの表示管理
-      setIsIconVisible(false);
-      setIsIconVisibleTwo(value === '');
-      setIsIconVisibleThree(value !== '');
-    } else {
-      const toastId = 'only-ascii';
-      if (!toastIdRef.current || !toast.isActive(toastIdRef.current)) {
-        toastIdRef.current = toast({
-          id: toastId,
-          title: '半角英数字のみを入力してください',
-          description: 'クリップボードへのコピーに失敗しました。',
-          status: 'error',
-          duration: 5000,
-          isClosable: true,
-          position: 'top',
-        });
-      }
-    }
+    // const pattern = /^[a-zA-Z0-9]*$/;
+    // if (pattern.test(value)) {
+    const newWord = [...wordsToReplace];
+    newWord[index].word = value;
+    setWordsToReplace(newWord);
+    //アイコンアニメーションの表示管理
+    setIsIconVisible(false);
+    setIsIconVisibleTwo(value === '');
+    setIsIconVisibleThree(value !== '');
+    // } else {
+    //   const toastId = 'only-ascii';
+    //   if (!toastIdRef.current || !toast.isActive(toastIdRef.current)) {
+    //     toastIdRef.current = toast({
+    //       id: toastId,
+    //       title: '半角英数字のみを入力してください',
+    //       description: 'クリップボードへのコピーに失敗しました。',
+    //       status: 'error',
+    //       duration: 5000,
+    //       isClosable: true,
+    //       position: 'top',
+    //     });
+    //   }
+    // }
   };
   // 変換形式
   const handleCaseFormatChange = (index: number, value: string) => {

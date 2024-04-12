@@ -57,7 +57,3 @@ export const useFormState = () => {
   }
   return context;
 };
-
-// const [wordsToReplace, setWordsToReplace] = useState<WordsToReplace[]>([
-//   { word: '', caseFormat: 'default', id: uuidv4(), inputOrder: 1 },
-// ]);

@@ -51,7 +51,7 @@ const ConverterWordForm: React.FC<WordFormProps> = ({
           sx={{ width: '150px' }}
         />
       </Box>
-      <Box>
+      <Box mt={3}>
         <Text fontSize="sm" fontWeight="semibold">
           変換形式
         </Text>
@@ -66,7 +66,7 @@ const ConverterWordForm: React.FC<WordFormProps> = ({
           <option value="Choice">Choice</option>
         </Select>
       </Box>
-      <Box>
+      <Box mt={3}>
         <Text fontSize="sm" fontWeight="semibold">
           順序
         </Text>

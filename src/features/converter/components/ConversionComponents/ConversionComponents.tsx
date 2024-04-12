@@ -13,6 +13,9 @@ import * as ConverterHooks from '@/features/converter/hooks/index';
 //Eslintから初めてだらけで記事を読んだりやAIに質問しながらなので追いついていない・抜けているところがあると思うので足りないところは遠慮しないで指摘して欲しい。
 //ググったり、カーソル先生に質問しながら作成したので、もし間違えているところとかあれば教えてほしい。
 //恐らく、なんでここはきちんとやっているのにここはやってないの？的な箇所あると思う。
+
+//クリックで文字入力を完了するとanimateエラーがでる。未対応
+//対応案→クリック入力の受付をフォーム入力時にできないようにする。アニメーションの表示条件を変更してみる。
 import React from 'react';
 import { Box, Text, HStack, Flex, Divider } from '@chakra-ui/react';
 import { AnimatePresence } from 'framer-motion';
