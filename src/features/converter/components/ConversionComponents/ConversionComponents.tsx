@@ -1,6 +1,6 @@
 'use client';
 import * as Converter from '@/features/converter/components/index';
-import * as Effects from '@/components/effects/index';
+import * as Effects from '@/components/Effects/index';
 import * as ConverterHooks from '@/features/converter/hooks/index';
 //試みた事。
 //hooksを作成して、ConverterComponents内をすっきりさせてみた。
@@ -26,7 +26,7 @@ import 'prismjs/themes/prism-okaidia.css';
 import { useUIState } from '../../hooks/useUIState';
 import { useFormState } from '../../hooks/useFormState';
 import ConverterCodeEditor from '../ConverterCodeEditor/ConverterCodeEditor';
-import ShadowBox from '@/components/elements/box/ShadowBox';
+import ShadowBox from '@/components/Elements/Box/ShadowBox';
 
 const ConversionComponents = () => {
   //フォーム関連の状態管理
@@ -105,6 +105,7 @@ const ConversionComponents = () => {
               shadowBoxLeft="50px"
               shadowBoxTop="26px"
             >
+              {/* ここ自体をConverterFormという命名にしてコンポーネント化してconverterディレクトリに格納する */}
               <Flex justifyContent="space-between">
                 <Text fontSize="lg" fontWeight="semibold">
                   変換フォーム
@@ -118,6 +119,8 @@ const ConversionComponents = () => {
                 </HStack>
               </Flex>
               <Divider my={4} sx={{ borderColor: 'gray.400' }} />
+              {/* インプットフォームとフォーム関連は共通化componentsにまとめてPropsとして受け取る形にした方がいい */}
+              {/* ConverterPrefixForm → InputFormに変更  共通のコンポーネントに格納してpropsとして渡して使用する */}
               <Converter.ConverterPrefixForm
                 prefix={prefix}
                 snippetName={snippetName}
@@ -125,6 +128,7 @@ const ConversionComponents = () => {
                 onSnippetChange={handleSnippetChange}
               />
               {wordsToReplace.map((word, index) => (
+                // ConverterForm → Formに変更  共通のコンポーネントに格納してpropsとして渡して使用する
                 <Converter.ConverterWordForm
                   key={index}
                   word={word.word}

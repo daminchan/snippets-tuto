@@ -30,7 +30,7 @@ const StepChanInitial = () => {
         >
           Step.1!
         </Text>
-        <Image src="/22332633.png" alt="適切な説明文" width={50} height={50}></Image>
+        <Image src="/22332633.png" alt="ステップちゃん１" width={50} height={50}></Image>
       </VStack>
     </motion.div>
   );

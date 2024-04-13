@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button, HStack } from '@chakra-ui/react';
 import { CopyIcon } from '@chakra-ui/icons';
-import CustomButton from '@/components/elements/button/CustomButton';
+import CustomButton from '@/components/Elements/Button/CustomButton';
 
 interface ActionButtonsProps {
   onClear: () => void;

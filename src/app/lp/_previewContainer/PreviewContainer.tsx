@@ -24,8 +24,8 @@ import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism-okaidia.css';
 import { ArrowForwardIcon, DeleteIcon } from '@chakra-ui/icons';
 
-import ClickMessage from '@/components/effects/ClickMessage';
-import Fade from '@/components/effects/Fade';
+import ClickMessage from '@/components/Effects/ClickMessage';
+import Fade from '@/components/Effects/Fade';
 interface PreviewContainerProps {
   onButtonClick: () => void;
   onOverLay: () => void;

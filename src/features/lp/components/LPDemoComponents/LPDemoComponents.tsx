@@ -1,5 +1,6 @@
 'use client';
 import * as LPhooks from '@/features/lp/hooks/index';
+
 import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
@@ -24,8 +25,8 @@ import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism-okaidia.css';
 
-import ClickMessage from '@/components/effects/ClickMessage';
-import Fade from '@/components/effects/Fade';
+import ClickMessage from '@/components/Effects/ClickMessage';
+import Fade from '@/components/Effects/Fade';
 interface PreviewContainerProps {
   onButtonClick: () => void;
   onOverLay: () => void;
@@ -137,6 +138,7 @@ const LPDemoComponents: React.FC<PreviewContainerProps> = ({ onButtonClick, onOv
               </Text>
               <Divider my={4} sx={{ borderColor: 'gray.400' }} />{' '}
               {/* DividerはChakra UIに含まれるコンポーネントで、水平線を描画してコンテンツを区切る */}
+              {/* LPワードフォーム */}
               <VStack spacing={4} mt={3} align="stretch">
                 <HStack spacing={4} alignItems="center">
                   {/* 変換したい単語 */}
@@ -172,6 +174,7 @@ const LPDemoComponents: React.FC<PreviewContainerProps> = ({ onButtonClick, onOv
                     </NumberInput>
                   </Box>
                   <AnimatePresence>{isMessageVisible && <ClickMessage />}</AnimatePresence>
+                  {/* Hスタック LPあぷでぼたん */}
                   <Flex flex="1" justifyContent="flex-end" position="relative">
                     <Button
                       onClick={updateCode}
@@ -236,6 +239,7 @@ const LPDemoComponents: React.FC<PreviewContainerProps> = ({ onButtonClick, onOv
               </Text>
               <Divider my={4} sx={{ borderColor: 'gray.400' }} />{' '}
               {/* DividerはChakra UIに含まれるコンポーネントで、水平線を描画してコンテンツを区切る */}
+              {/* LPワードフォーム */}
               <VStack spacing={4} mt={3} align="stretch">
                 <HStack spacing={4} alignItems="center">
                   {/* 変換したい単語 */}
@@ -270,6 +274,7 @@ const LPDemoComponents: React.FC<PreviewContainerProps> = ({ onButtonClick, onOv
                       </NumberInputStepper>
                     </NumberInput>
                   </Box>
+                  {/* Hスタック */}
                   <Flex flex="1" justifyContent="flex-end" position="relative">
                     <Button
                       onClick={updateCode}

@@ -11,7 +11,7 @@ interface ShadowBoxLayoutProps {
   shadowBoxLeft?: string;
   shadowBoxTop?: string;
 }
-const ShadowBoxLayout: React.FC<ShadowBoxLayoutProps> = ({
+const ShadowBox: React.FC<ShadowBoxLayoutProps> = ({
   children,
   width = '700px', // デフォルト値
   maxWidth = '700px',
@@ -60,4 +60,4 @@ const ShadowBoxLayout: React.FC<ShadowBoxLayoutProps> = ({
   );
 };
 
-export default ShadowBoxLayout;
+export default ShadowBox;

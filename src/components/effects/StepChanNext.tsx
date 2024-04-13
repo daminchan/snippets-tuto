@@ -2,8 +2,6 @@ import React from 'react';
 import { Image, Text, VStack } from '@chakra-ui/react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-//無理やり対応している。
-//初期値にアイコンが変な所に出ているためアニメーションの開始を遅らせて対応
 const StepChanNext = () => {
   return (
     <motion.div
@@ -30,7 +28,7 @@ const StepChanNext = () => {
         >
           Step.2!!
         </Text>
-        <Image src="/22332633.png" alt="適切な説明文" width={50} height={50}></Image>
+        <Image src="/22332633.png" alt="ステップちゃん２" width={50} height={50}></Image>
       </VStack>
     </motion.div>
   );

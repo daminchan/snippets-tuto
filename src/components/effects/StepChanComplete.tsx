@@ -28,7 +28,7 @@ const StepChanComplete = () => {
         >
           Step.3!!!
         </Text>
-        <Image src="/22332633.png" alt="適切な説明文" width={50} height={50}></Image>
+        <Image src="/22332633.png" alt="ステップちゃん３" width={50} height={50}></Image>
       </VStack>
     </motion.div>
   );

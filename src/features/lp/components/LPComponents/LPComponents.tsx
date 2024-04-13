@@ -1,14 +1,14 @@
 'useClient';
 import * as LPhooks from '@/features/lp/hooks/index';
-
+import * as Effects from '@/components/Effects/index';
 import { Box, Flex, Text } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import LPDemoComponents from '../LPDemoComponents/LPDemoComponents';
 
 import { motion, AnimatePresence } from 'framer-motion';
 
-import Fade from '@/components/effects/Fade';
-import Zoom from '@/components/effects/Zoom';
+import Fade from '@/components/Effects/Fade';
+import Zoom from '@/components/Effects/Zoom';
 import { useUIState } from '@/features/converter/hooks/useUIState';
 
 const LPComponents = () => {
@@ -61,6 +61,7 @@ const LPComponents = () => {
           }}
         />
       </Fade>
+      <AnimatePresence>{showOverLay && <Effects.Overlay></Effects.Overlay>}</AnimatePresence>
       {/* <AnimatePresence>
         {showOverLay && (
           <>
@@ -85,6 +86,7 @@ const LPComponents = () => {
               }}
               onClick={handleSetOverLay}
             />
+            
             <Box
               m="9"
               style={{
@@ -101,6 +103,7 @@ const LPComponents = () => {
             </Box>
           </>
         )}
+        
       </AnimatePresence>
       <AnimatePresence>{showTryOutSidebar && <TryItOutLinkSideContainer />}</AnimatePresence> */}
     </Box>

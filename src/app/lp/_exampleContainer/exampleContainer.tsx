@@ -5,8 +5,8 @@ import PreviewContainer from '../_previewContainer/PreviewContainer';
 import TryItOutLinkContainer from '../_tryItoutLinkContainer/tryItOutLinkContainer';
 import { motion, AnimatePresence } from 'framer-motion';
 import TryItOutLinkSideContainer from '../_tryItoutLinksideContainer/tryItoutLinksideContainer';
-import Fade from '@/components/effects/Fade';
-import Zoom from '@/components/effects/Zoom';
+import Fade from '@/components/Effects/Fade';
+import Zoom from '@/components/Effects/Zoom';
 
 const ExampleContainer = () => {
   const [showTryOut, setShowTryOut] = useState(false);
