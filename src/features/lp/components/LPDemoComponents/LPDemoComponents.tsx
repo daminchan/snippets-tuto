@@ -25,8 +25,8 @@ import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism-okaidia.css';
 
-import ClickMessage from '@/components/test2/ClickMessage';
-import Fade from '@/components/test2/Fade';
+import ClickMessage from '@/components/Effects/ClickMessage';
+import Fade from '@/components/Effects/Fade';
 interface PreviewContainerProps {
   onButtonClick: () => void;
   onOverLay: () => void;

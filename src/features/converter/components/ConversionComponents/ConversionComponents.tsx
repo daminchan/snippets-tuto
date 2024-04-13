@@ -1,6 +1,6 @@
 'use client';
 import * as Converter from '@/features/converter/components/index';
-import * as Effects from '@/components/test2/index';
+import * as Effects from '@/components/Effects/index';
 import * as ConverterHooks from '@/features/converter/hooks/index';
 //試みた事。
 //hooksを作成して、ConverterComponents内をすっきりさせてみた。
