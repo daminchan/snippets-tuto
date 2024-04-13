@@ -22,10 +22,9 @@ import { highlight, languages } from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism-okaidia.css';
-import { ArrowForwardIcon, DeleteIcon } from '@chakra-ui/icons';
-
-import ClickMessage from '@/components/Effects/ClickMessage';
 import Fade from '@/components/Effects/Fade';
+import ClickMessage from '@/components/Effects/ClickMessage';
+
 interface PreviewContainerProps {
   onButtonClick: () => void;
   onOverLay: () => void;
