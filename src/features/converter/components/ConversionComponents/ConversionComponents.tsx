@@ -26,7 +26,7 @@ import 'prismjs/themes/prism-okaidia.css';
 import { useUIState } from '../../hooks/useUIState';
 import { useFormState } from '../../hooks/useFormState';
 import ConverterCodeEditor from '../ConverterCodeEditor/ConverterCodeEditor';
-import ShadowBox from '@/components/Elements/Box/ShadowBox';
+import CustomBox from '@/components/Elements/Box/CustomBox';
 
 const ConversionComponents = () => {
   //フォーム関連の状態管理
@@ -73,7 +73,7 @@ const ConversionComponents = () => {
         gap={5}
       >
         <Flex justifyContent="space-between" flexDirection="row" width="80%" maxWidth="1200px" gap={5}>
-          <ShadowBox>
+          <CustomBox>
             <Flex justifyContent="space-between">
               <Text fontSize="lg" fontWeight="semibold">
                 変換したいコードを張り付ける
@@ -93,10 +93,10 @@ const ConversionComponents = () => {
               isUpdated={isUpdated}
               highlight={highlightWithPrism}
             />
-          </ShadowBox>
+          </CustomBox>
           {/* 変換フォーム */}
           <Flex flex="1" direction="column">
-            <ShadowBox
+            <CustomBox
               width="550px"
               maxWidth="550px"
               shadowBoxHeight="90%"
@@ -141,7 +141,7 @@ const ConversionComponents = () => {
                   onRemove={() => removeForm(word.id)}
                 />
               ))}
-            </ShadowBox>
+            </CustomBox>
           </Flex>
         </Flex>
       </Flex>

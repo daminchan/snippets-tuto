@@ -2,7 +2,7 @@
 import React from 'react';
 import { IconButton, HStack } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
-import CustomButton from '@/components/Elements/Button/CustomButton';
+import CustomButton from '@/components/Elements/Button/CustomButtonLayout';
 
 interface ConversionButtonProps {
   isLoading: boolean;
