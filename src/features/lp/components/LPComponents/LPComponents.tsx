@@ -1,14 +1,14 @@
 'useClient';
 import * as LPhooks from '@/features/lp/hooks/index';
-import * as Effects from '@/components/Effects/index';
+import * as Effects from '@/components/test2/index';
 import { Box, Flex, Text } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import LPDemoComponents from '../LPDemoComponents/LPDemoComponents';
 
 import { motion, AnimatePresence } from 'framer-motion';
 
-import Fade from '@/components/Effects/Fade';
-import Zoom from '@/components/Effects/Zoom';
+import Fade from '@/components/test2/Fade';
+import Zoom from '@/components/test2/Zoom';
 import { useUIState } from '@/features/converter/hooks/useUIState';
 
 const LPComponents = () => {

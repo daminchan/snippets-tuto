@@ -1,7 +1,6 @@
 import React from 'react';
 import { Image, Text, VStack } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-
 const ClickMessage = () => {
   return (
     <motion.div

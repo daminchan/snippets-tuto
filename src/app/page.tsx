@@ -1,6 +1,6 @@
 'use client';
 
-import Fade from '@/components/Effects/Fade';
+import Fade from '@/components/test2/Fade';
 import Section from '@/components/section/Section';
 import ConversionComponents from '@/features/converter/components/ConversionComponents/ConversionComponents';
 import { FormStateProvider } from '@/features/converter/hooks/useFormState';
