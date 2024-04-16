@@ -1,117 +1,78 @@
 'use client';
-import * as LPhooks from '@/features/lp/hooks/index';
-
-import React, { useEffect, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import {
-  Button,
-  Select,
-  Box,
-  VStack,
-  Text,
-  HStack,
-  Flex,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
-  Divider,
-} from '@chakra-ui/react';
-import { Input } from '@chakra-ui/react';
-import Editor from 'react-simple-code-editor';
-import { highlight, languages } from 'prismjs/components/prism-core';
+import 'prismjs/components/prism-core';
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism-okaidia.css';
+import React from 'react';
+import * as LPhooks from '@/features/lp/hooks/index';
+import * as Effects from '@/components/Effects';
+import { Box, Text, Flex } from '@chakra-ui/react';
+import CustomBox from '@/components/Elements/Box/CustomBox';
+import LPFromComponents from '../LPFormComponents/LPFormComponents';
 
-import ClickMessage from '@/components/Effects/ClickMessage';
-import Fade from '@/components/Effects/Fade';
-interface PreviewContainerProps {
-  onButtonClick: () => void;
-  onOverLay: () => void;
-  onSidebar: () => void;
-}
-
-const LPDemoComponents: React.FC<PreviewContainerProps> = ({ onButtonClick, onOverLay, onSidebar }) => {
-  const { setIsMessageVisible, setIsButtonDisabled, setIsToggled, isToggled, isMessageVisible, isButtonDisabled } =
-    LPhooks.useLPUIState();
-  const { sampleCode, code, rightCode, newCode, setSampleCode, setCode, setRightCode } = LPhooks.useLPState();
-
-  // const [sampleCode, setSampleCode] = useState(`
-
-  // import React  from 'react';
-
-  // const user = () => {
-  //   return (
-  //     <div>
-  //       { content }
-  //     </div>
-  //   );
-  // };`);
-  // //サンプルコードを表示させる
-  // const [code, setCode] = useState(sampleCode);
-  // //ボタンのboolean制御
-  // const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  // //アニメーションの制御
-  // const [isToggled, setIsToggled] = useState(false);
-  // const [isMessageVisible, setIsMessageVisible] = useState(true);
-  // const [rightCode, setRightCode] = useState('');
-
-  // const newCode = `
-  // {
-  //   "": {
-  //     "prefix": "",
-  //     "body": [
-  //       "  ",
-  //       "  import React  from 'React';",
-  //       "",
-  //       "  const \${1/(.*)/\${1:/pascalcase}/}\ = () => {",
-  //       "    return (",
-  //       "      <div>",
-  //       "        { content }",
-  //       "      </div>",
-  //       "    );",
-  //       "  };"
-  //     ],
-  //     "description": ""
-  //   }
-  // }`;
-
-  const updateCode = () => {
-    setIsMessageVisible(false);
-    setIsButtonDisabled(true);
-    onButtonClick();
-    onOverLay();
-    onSidebar();
-
-    const addCharacter = (i: number) => {
-      if (i < newCode.length) {
-        setTimeout(() => {
-          setRightCode((currentCode) => currentCode + newCode[i]);
-          addCharacter(i + 1);
-        }, 15);
-      }
-    };
-    addCharacter(0);
-    setIsToggled(true);
-  };
+const LPDemoComponents = () => {
+  const { isToggled, isMessageVisible, isButtonDisabled } = LPhooks.useLPUIState();
+  const { code, rightCode, setCode, setRightCode } = LPhooks.useLPState();
+  const { updateCode } = LPhooks.useLPActions();
 
   return (
     <Box>
       <Flex minHeight="auto" direction="column" p={5}>
-        <Fade delay={0}>
+        <Effects.Fade delay={0}>
           <Text fontSize="2xl" fontWeight="bold" textAlign="center" fontStyle="italic" mb={2}>
             Live Demo
           </Text>
           <Text fontWeight="md" textAlign="center" color="gray.500">
             ライブ デモ
           </Text>
-        </Fade>
+        </Effects.Fade>
       </Flex>
-      <Box display="flex" justifyContent="center" alignItems="center" flexDirection="row" m={6}>
-        <Box width="700px">
-          <motion.div
+      {/* フォーム */}
+      <Flex justifyContent="center" alignItems="center" flexDirection="row" m={6}>
+        <Box>
+          <Effects.Slide isToggled={isToggled}>
+            <CustomBox>
+              <LPFromComponents
+                codeValue={code}
+                isButtonDisabled={isButtonDisabled}
+                isMessageVisible={isMessageVisible}
+                updateCode={updateCode}
+                onCodeChange={setCode}
+                title="変換前"
+                description=" userという文字をPascalCaseに変換するデモ"
+                textColor="#000000"
+              ></LPFromComponents>
+            </CustomBox>
+          </Effects.Slide>
+        </Box>
+        <Box>
+          <Effects.Slide isToggled={isToggled} toggledScale={1.1} toggledX={-350}>
+            <CustomBox>
+              <LPFromComponents
+                codeValue={rightCode}
+                isButtonDisabled={isButtonDisabled}
+                isMessageVisible={false}
+                updateCode={updateCode}
+                onCodeChange={setRightCode}
+                title="変換後"
+                description=" userという文字をPascalCaseに変換するデモ"
+                textColor="#f09433"
+              ></LPFromComponents>
+            </CustomBox>
+          </Effects.Slide>
+        </Box>
+      </Flex>
+    </Box>
+  );
+};
+
+export default LPDemoComponents;
+
+{
+  /* <Box width="700px"> */
+}
+{
+  /* <motion.div
             initial={{ scale: 1, x: 0 }}
             animate={{ scale: isToggled ? 0.9 : 1, x: isToggled ? 350 : 0 }}
             transition={{
@@ -137,11 +98,10 @@ const LPDemoComponents: React.FC<PreviewContainerProps> = ({ onButtonClick, onOv
                 userという文字をPascalCaseに変換するデモ
               </Text>
               <Divider my={4} sx={{ borderColor: 'gray.400' }} />{' '}
-              {/* DividerはChakra UIに含まれるコンポーネントで、水平線を描画してコンテンツを区切る */}
-              {/* LPワードフォーム */}
+          
               <VStack spacing={4} mt={3} align="stretch">
                 <HStack spacing={4} alignItems="center">
-                  {/* 変換したい単語 */}
+                
                   <Box>
                     <Text fontSize="sm" fontWeight="semibold">
                       変換したい単語
@@ -153,14 +113,14 @@ const LPDemoComponents: React.FC<PreviewContainerProps> = ({ onButtonClick, onOv
                       sx={{ width: '150px', fontWeight: 'bold', color: 'gray.800', fontStyle: 'italic' }}
                     />
                   </Box>
-                  {/* 変換形式 */}
+              
                   <Box>
                     <Text fontSize="sm" fontWeight="semibold">
                       変換形式
                     </Text>
                     <Select placeholder="Pascal" size="sm" sx={{ width: '120px' }}></Select>
                   </Box>
-                  {/* 順序 */}
+             
                   <Box>
                     <Text fontSize="sm" fontWeight="semibold">
                       順序
@@ -174,7 +134,7 @@ const LPDemoComponents: React.FC<PreviewContainerProps> = ({ onButtonClick, onOv
                     </NumberInput>
                   </Box>
                   <AnimatePresence>{isMessageVisible && <ClickMessage />}</AnimatePresence>
-                  {/* Hスタック LPあぷでぼたん */}
+               
                   <Flex flex="1" justifyContent="flex-end" position="relative">
                     <Button
                       onClick={updateCode}
@@ -218,8 +178,14 @@ const LPDemoComponents: React.FC<PreviewContainerProps> = ({ onButtonClick, onOv
                 }}
               />
             </Box>
-          </motion.div>
-        </Box>
+          </motion.div> */
+}
+{
+  /* </Box> */
+}
+
+{
+  /*        
         <Box width="700px">
           <motion.div
             initial={{ scale: 1, x: 0 }}
@@ -238,11 +204,10 @@ const LPDemoComponents: React.FC<PreviewContainerProps> = ({ onButtonClick, onOv
                 userという文字をPascalCaseに変換するデモ
               </Text>
               <Divider my={4} sx={{ borderColor: 'gray.400' }} />{' '}
-              {/* DividerはChakra UIに含まれるコンポーネントで、水平線を描画してコンテンツを区切る */}
-              {/* LPワードフォーム */}
+             
               <VStack spacing={4} mt={3} align="stretch">
                 <HStack spacing={4} alignItems="center">
-                  {/* 変換したい単語 */}
+             
                   <Box>
                     <Text fontSize="sm" fontWeight="semibold">
                       変換したい単語
@@ -254,14 +219,14 @@ const LPDemoComponents: React.FC<PreviewContainerProps> = ({ onButtonClick, onOv
                       sx={{ width: '150px', fontWeight: 'bold', color: 'gray.800', fontStyle: 'italic' }}
                     />
                   </Box>
-                  {/* 変換形式 */}
+             
                   <Box>
                     <Text fontSize="sm" fontWeight="semibold">
                       変換形式
                     </Text>
                     <Select isReadOnly placeholder="Pascal" size="sm" sx={{ width: '120px' }}></Select>
                   </Box>
-                  {/* 順序 */}
+             
                   <Box>
                     <Text fontSize="sm" fontWeight="semibold">
                       順序
@@ -274,7 +239,7 @@ const LPDemoComponents: React.FC<PreviewContainerProps> = ({ onButtonClick, onOv
                       </NumberInputStepper>
                     </NumberInput>
                   </Box>
-                  {/* Hスタック */}
+              
                   <Flex flex="1" justifyContent="flex-end" position="relative">
                     <Button
                       onClick={updateCode}
@@ -317,10 +282,5 @@ const LPDemoComponents: React.FC<PreviewContainerProps> = ({ onButtonClick, onOv
               />
             </Box>
           </motion.div>
-        </Box>
-      </Box>
-    </Box>
-  );
-};
-
-export default LPDemoComponents;
+        </Box> */
+}

@@ -3,7 +3,7 @@ import React from 'react';
 import { Box, Button, Text, Link, VStack } from '@chakra-ui/react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 
-const TryItOutLinkContainer = () => {
+const TryOutLink = () => {
   return (
     <Box width="600px" shadow="base" borderColor="gray.200" borderRadius="15px" p={3} bg="white" margin="auto">
       <VStack spacing={4}>
@@ -26,4 +26,4 @@ const TryItOutLinkContainer = () => {
   );
 };
 
-export default TryItOutLinkContainer;
+export default TryOutLink;

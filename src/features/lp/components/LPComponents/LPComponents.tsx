@@ -1,92 +1,24 @@
-'useClient';
+'use client';
 import * as LPhooks from '@/features/lp/hooks/index';
 import * as Effects from '@/components/Effects/index';
-import { Box, Flex, Text } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import * as Link from '@/components/Link';
+import { Box } from '@chakra-ui/react';
+import React from 'react';
 import LPDemoComponents from '../LPDemoComponents/LPDemoComponents';
-
-import { motion, AnimatePresence } from 'framer-motion';
-
-import Fade from '@/components/Effects/Fade';
-import Zoom from '@/components/Effects/Zoom';
-import { useUIState } from '@/features/converter/hooks/useUIState';
+import { AnimatePresence } from 'framer-motion';
 
 const LPComponents = () => {
-  const {
-    showTryOut,
-    setShowTryOut,
-    showOverLay,
-    setOverLay,
-    showTryOutSidebar,
-    setShowTryOutSidebar,
-    showTryOutSidebarDefault,
-    setShowTryOutSidebarDefault,
-  } = LPhooks.useLPUIState();
-
-  const { handleSetOverLay, handleSetTryOutSidebar, handlePreviewButtonClick, handleOnOverLay } =
-    LPhooks.useLPHandler();
-  //   const [showTryOut, setShowTryOut] = useState(false);
-  //   const [showOverLay, setOverLay] = useState(false);
-  //   const [showTryOutSidebar, setShowTryOutSidebar] = useState(true);
-  //   const [showTryOutSidebarDefault, setShowTryOutSidebarDefault] = useState(true);
-
-  //   const handleSetOverLay = () => {
-  //     setOverLay(false);
-  //     setShowTryOut(false);
-  //     handleSetTryOutSidebar();
-  //   };
-  //   const handleSetTryOutSidebar = () => {
-  //     setShowTryOutSidebar(true);
-  //   };
-
-  //   const handlePreviewButtonClick = () => {
-  //     setShowTryOut(true);
-  //   };
-  //   const handleOnOverLay = () => {
-  //     setOverLay(true);
-  //   };
+  const { showOverLay, showTryOutSidebar } = LPhooks.useLPUIState();
 
   return (
     <Box>
-      <Fade delay={0}>
-        <LPDemoComponents
-          onButtonClick={() => {
-            setShowTryOut(true);
-          }}
-          onOverLay={() => {
-            setOverLay(true);
-          }}
-          onSidebar={() => {
-            setShowTryOutSidebar(false);
-          }}
-        />
-      </Fade>
-      <AnimatePresence>{showOverLay && <Effects.Overlay></Effects.Overlay>}</AnimatePresence>
-      {/* <AnimatePresence>
+      <Effects.Fade delay={0}>
+        <LPDemoComponents />
+      </Effects.Fade>
+      <AnimatePresence>
         {showOverLay && (
-          <>
-           
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.4 }}
-              exit={{ opacity: 0, transition: { duration: 0.5 } }}
-              transition={{
-                duration: 0.8,
-                delay: 6,
-                ease: 'easeInOut',
-              }}
-              style={{
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                width: '100vw',
-                height: '100vh',
-                backgroundColor: 'black',
-                zIndex: 1,
-              }}
-              onClick={handleSetOverLay}
-            />
-            
+          <Box>
+            <Effects.Overlay />
             <Box
               m="9"
               style={{
@@ -97,15 +29,14 @@ const LPComponents = () => {
                 zIndex: 2,
               }}
             >
-              <Zoom>
-                <TryItOutLinkContainer />
-              </Zoom>
+              <Effects.Zoom>
+                <Link.TryOutLink />
+              </Effects.Zoom>
             </Box>
-          </>
+          </Box>
         )}
-        
       </AnimatePresence>
-      <AnimatePresence>{showTryOutSidebar && <TryItOutLinkSideContainer />}</AnimatePresence> */}
+      <AnimatePresence>{showTryOutSidebar && <Link.TryOutSideLink />}</AnimatePresence>
     </Box>
   );
 };

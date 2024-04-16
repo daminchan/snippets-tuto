@@ -19,6 +19,7 @@ interface UIStateContextType {
 }
 
 const LPUIStateContext = createContext<UIStateContextType | undefined>(undefined);
+
 interface LPUIStateProviderProps {
   children: ReactNode;
 }

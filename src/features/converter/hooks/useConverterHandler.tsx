@@ -2,12 +2,15 @@ import { useToast } from '@chakra-ui/react';
 import { useFormState } from './useFormState';
 import { useUIState } from './useUIState';
 import { useRef } from 'react';
+import { useConverterActions } from './useConverterActions';
 
 export const useConverterHandler = () => {
   const { wordsToReplace, setWordsToReplace, setPrefix, setSnippetName } = useFormState();
   const { setIsIconVisible, setIsIconVisibleTwo, setIsIconVisibleThree } = useUIState();
+  const { updateCode } = useConverterActions();
   const toast = useToast();
   const toastIdRef = useRef<string | number | undefined>();
+
   // 変換単語
   const handleWordChange = (index: number, value: string) => {
     // const pattern = /^[a-zA-Z0-9]*$/;
@@ -59,11 +62,34 @@ export const useConverterHandler = () => {
     setSnippetName(value);
   };
 
+  const validateForm = (): boolean => {
+    const hasEmptyFields = wordsToReplace.some((item) => !item.word.trim() || !item.caseFormat.trim());
+    if (hasEmptyFields) {
+      toast({
+        title: 'エラー',
+        description: '変換単語を入力してください。',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
+      });
+      return false;
+    }
+    return true;
+  };
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
+    updateCode();
+  };
   return {
     handleWordChange,
     handleCaseFormatChange,
     handleInputOrderChange,
     handlePrefixChange,
     handleSnippetChange,
+    handleSubmit,
   };
 };

@@ -1,4 +1,5 @@
 'use client';
+
 import React from 'react';
 import Section from '@/components/section/Section';
 import { LPUIStateProvider } from '@/features/lp/hooks/useLPUIState';

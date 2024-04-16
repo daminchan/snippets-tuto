@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { Box } from '@chakra-ui/react';
 
@@ -13,7 +14,7 @@ interface CustomBoxProps {
 }
 const CustomBox: React.FC<CustomBoxProps> = ({
   children,
-  width = '700px', // デフォルト値
+  width = '700px',
   maxWidth = '700px',
   shadowBoxHeight = '96%',
   shadowBoxWidth = '90%',
@@ -26,7 +27,7 @@ const CustomBox: React.FC<CustomBoxProps> = ({
     display: 'inline-block',
     p: 3,
     m: 0,
-    width, // 外部から渡される値
+    width,
     maxWidth,
   };
 
@@ -54,7 +55,9 @@ const CustomBox: React.FC<CustomBoxProps> = ({
 
   return (
     <Box sx={commonBoxStyles}>
+      {/* ボックス影を表現しているカスタムボックス */}
       <Box sx={shadowOverlayBoxStyles} />
+      {/* ボックスの本体を表現しているカスタムボックス */}
       <Box sx={detailedBoxStyles}>{children}</Box>
     </Box>
   );

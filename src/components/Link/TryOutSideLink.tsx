@@ -3,7 +3,7 @@ import React from 'react';
 import { Box, Button, Link } from '@chakra-ui/react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { motion } from 'framer-motion';
-const TryItOutLinkSideContainer = () => {
+const TryOutSideLink = () => {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -27,4 +27,4 @@ const TryItOutLinkSideContainer = () => {
   );
 };
 
-export default TryItOutLinkSideContainer;
+export default TryOutSideLink;

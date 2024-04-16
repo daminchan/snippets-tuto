@@ -2,6 +2,10 @@
 import * as Converter from '@/features/converter/components/index';
 import * as Effects from '@/components/Effects/index';
 import * as ConverterHooks from '@/features/converter/hooks/index';
+// import dynamic from 'next/dynamic';
+// const DynamicConverterForm = dynamic(() => import('@/features/converter/components/ConverterForm/ConverterForm'), {
+//   ssr: false,
+// });
 //試みた事。
 //hooksを作成して、ConverterComponents内をすっきりさせてみた。
 //import文も長くなるため、indexファイルから一括でインポートするようにしてみた：参考にした記事 https://note.com/ryoppei/n/n2e3e7a66e758#a56a37a1-5d0b-49d6-b1cd-1bfa19a28fa5
@@ -17,7 +21,7 @@ import * as ConverterHooks from '@/features/converter/hooks/index';
 //クリックで文字入力を完了するとanimateエラーがでる。未対応
 //対応案→クリック入力の受付をフォーム入力時にできないようにする。アニメーションの表示条件を変更してみる。
 import React from 'react';
-import { Box, Text, HStack, Flex, Divider } from '@chakra-ui/react';
+import { Box, Text, Flex, Divider } from '@chakra-ui/react';
 import { AnimatePresence } from 'framer-motion';
 import Prism from 'prismjs';
 import 'prismjs/components/prism-clike';
@@ -27,6 +31,7 @@ import { useUIState } from '../../hooks/useUIState';
 import { useFormState } from '../../hooks/useFormState';
 import ConverterCodeEditor from '../ConverterCodeEditor/ConverterCodeEditor';
 import CustomBox from '@/components/Elements/Box/CustomBox';
+import ConverterForm from '../ConverterForm/ConverterForm';
 
 const ConversionComponents = () => {
   //フォーム関連の状態管理
@@ -44,8 +49,14 @@ const ConversionComponents = () => {
     setIsIconVisibleTwo,
   } = useUIState();
   //ハンドラーを管理するフック
-  const { handlePrefixChange, handleSnippetChange, handleWordChange, handleCaseFormatChange, handleInputOrderChange } =
-    ConverterHooks.useConverterHandler();
+  const {
+    handlePrefixChange,
+    handleSnippetChange,
+    handleWordChange,
+    handleCaseFormatChange,
+    handleInputOrderChange,
+    handleSubmit,
+  } = ConverterHooks.useConverterHandler();
   //変換コンポーネントの追加、削除、クリア、コピー機能を管理するフック
   const { addForm, removeForm, clearCode, copyToClipboard, updateCode } = ConverterHooks.useConverterActions();
   //react-simple-code-editorがhooksなどに関与すると画面が真っ白になる為、一旦このまま
@@ -63,15 +74,7 @@ const ConversionComponents = () => {
 
   return (
     <Box>
-      <Flex
-        justifyContent="center"
-        flexDirection="row"
-        bg="gray.50"
-        as="form"
-        width="100%"
-        alignItems="flex-start"
-        gap={5}
-      >
+      <Flex justifyContent="center" flexDirection="row" bg="gray.50" width="100%" alignItems="flex-start" gap={5}>
         <Flex justifyContent="space-between" flexDirection="row" width="80%" maxWidth="1200px" gap={5}>
           <CustomBox>
             <Flex justifyContent="space-between">
@@ -96,6 +99,7 @@ const ConversionComponents = () => {
           </CustomBox>
           {/* 変換フォーム */}
           <Flex flex="1" direction="column">
+            {/* レイアウトを別定義で分けて読み込むべきか */}
             <CustomBox
               width="550px"
               maxWidth="550px"
@@ -105,42 +109,20 @@ const ConversionComponents = () => {
               shadowBoxLeft="50px"
               shadowBoxTop="26px"
             >
-              {/* ここ自体をConverterFormという命名にしてコンポーネント化してconverterディレクトリに格納する */}
-              <Flex justifyContent="space-between">
-                <Text fontSize="lg" fontWeight="semibold">
-                  変換フォーム
-                </Text>
-                <HStack>
-                  <Converter.ConverterAddUpdateButton
-                    isLoading={isLoading}
-                    onAddForm={addForm}
-                    onUpdateCode={updateCode}
-                  />
-                </HStack>
-              </Flex>
-              <Divider my={4} sx={{ borderColor: 'gray.400' }} />
-              {/* インプットフォームとフォーム関連は共通化componentsにまとめてPropsとして受け取る形にした方がいい */}
-              {/* ConverterPrefixForm → InputFormに変更  共通のコンポーネントに格納してpropsとして渡して使用する */}
-              <Converter.ConverterPrefixForm
+              <ConverterForm
+                isLoading={isLoading}
+                addForm={addForm}
                 prefix={prefix}
                 snippetName={snippetName}
-                onPrefixChange={handlePrefixChange}
-                onSnippetChange={handleSnippetChange}
+                handlePrefixChange={handlePrefixChange}
+                handleSnippetChange={handleSnippetChange}
+                wordsToReplace={wordsToReplace}
+                handleWordChange={handleWordChange}
+                handleCaseFormatChange={handleCaseFormatChange}
+                handleInputOrderChange={handleInputOrderChange}
+                handleSubmit={handleSubmit}
+                removeForm={removeForm}
               />
-              {wordsToReplace.map((word, index) => (
-                // ConverterForm → Formに変更  共通のコンポーネントに格納してpropsとして渡して使用する
-                <Converter.ConverterWordForm
-                  key={index}
-                  word={word.word}
-                  id={word.id}
-                  caseFormat={word.caseFormat}
-                  inputOrder={word.inputOrder}
-                  onWordChange={(value) => handleWordChange(index, value)}
-                  onCaseFormatChange={(value) => handleCaseFormatChange(index, value)}
-                  onInputOrderChange={(value, id) => handleInputOrderChange(value, id)}
-                  onRemove={() => removeForm(word.id)}
-                />
-              ))}
             </CustomBox>
           </Flex>
         </Flex>

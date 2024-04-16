@@ -6,11 +6,11 @@ const ClickMessage = () => {
     <motion.div
       initial={{ opacity: 0, y: 50 }} // 初期位置をボタンの上に設定
       style={{
-        position: 'absolute', // 絶対位置
-        top: '0px', // 上方向に20px（ボタンの上）
-        zIndex: 10, // 他の要素より前面に
-        transform: 'translateX(50%)', // X軸の中心を基点にする
-        left: '80%',
+        position: 'absolute',
+        bottom: '96%',
+        zIndex: 10,
+        transform: 'translateX(50%)',
+        left: '74%',
         justifyContent: 'center',
         alignItems: 'center',
       }}
@@ -21,12 +21,12 @@ const ClickMessage = () => {
         <Text
           sx={{
             transform: 'rotate(10deg) translateX(10px)', // 10度に傾ける
-            display: 'inline-block', // transform を適用するために必要
+            display: 'inline-block',
           }}
         >
           click here!!
         </Text>
-        <Image src="/22332633.png" alt="適切な説明文" width={50} height={50}></Image>
+        <Image src="/22332633.png" alt="クリックちゃん" width={50} height={50}></Image>
       </VStack>
     </motion.div>
   );

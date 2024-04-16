@@ -4,10 +4,10 @@ import { useLPUIState } from './useLPUIState';
 
 export const useLPHandler = () => {
   const {
-    showOverLay,
-    showTryOut,
-    showTryOutSidebar,
-    showTryOutSidebarDefault,
+    // showOverLay,
+    // showTryOut,
+    // showTryOutSidebar,
+    // showTryOutSidebarDefault,
     setOverLay,
     setShowTryOut,
     setShowTryOutSidebar,
@@ -29,6 +29,7 @@ export const useLPHandler = () => {
   const handleOnOverLay = () => {
     setOverLay(true);
   };
+
   return {
     handleSetOverLay,
     handleSetTryOutSidebar,

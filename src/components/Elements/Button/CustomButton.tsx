@@ -1,15 +1,19 @@
 'use client';
 import React from 'react';
-import { Button, IconButton, HStack } from '@chakra-ui/react';
-import { AddIcon } from '@chakra-ui/icons';
+import { Button } from '@chakra-ui/react';
+
 import { CustomButtonLayoutStyle } from './CustomButtonLayoutStyle';
 
 interface CustomButtonProps {
   width?: string;
   height?: string;
   isLoading?: boolean;
+  isDemo?: boolean;
+  isDisabled?: boolean;
   onClick?: () => void;
   children: React.ReactNode;
+
+  type?: 'button' | 'submit' | 'reset';
 }
 
 const CustomButton: React.FC<CustomButtonProps> = ({
@@ -18,8 +22,13 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   onClick,
   isLoading,
   children,
+  type = 'submit',
+  isDemo = false,
+  isDisabled,
 }) => (
   <Button
+    isDisabled={isDisabled}
+    type={type}
     size="sm"
     onClick={onClick}
     isLoading={isLoading}
